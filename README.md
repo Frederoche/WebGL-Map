@@ -10,4 +10,4 @@ It is based on a quadtree structure.
 
 Further work:
 - I intend to make it work on on Edge and make som optimization to run faster.
--rewrite the proxy from C# to Nodejs
+- Rewrite the proxy from C# to Nodejs
