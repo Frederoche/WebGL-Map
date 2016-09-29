@@ -49,6 +49,7 @@ function ThreeDEngine(canvas, tileUrl, elevationUrl, initialRootSize) {
     this.mousemove = false;
 
     this._lastdate = new Date();
+    this.lastUpdateCall = null;
 };
 
 
@@ -235,7 +236,10 @@ ThreeDEngine.prototype =
 
         this.wireFrame = window.device.TRIANGLES;
 
-        var mouseWheel = function(e) {
+        var mouseWheel = function (e) {
+            if (this.lastUpdateCall)
+                cancelAnimationFrame(this.lastUpdateCall);
+
             if (this.camera.position[1] < 11.0 && this.camera.position[1] >= 2.0) {
                 this.camera.speed = 0.25;
             } else if (this.camera.position[1] < 2.0 && this.camera.position[1] >= 1.0) {
@@ -258,6 +262,13 @@ ThreeDEngine.prototype =
                 this.camera.moveBackward();
                 this.birdCamera.moveBackward();
             }
+
+           
+
+            this.lastUpdateCall = requestAnimationFrame(function () {
+                requestAnimationFrame(this.renderScene.bind(this));
+
+            });
 
         };
 
@@ -310,18 +321,21 @@ ThreeDEngine.prototype =
        
         document.onmousemove = function (e)
         {
-            var localPositionX =  2.0 * e.clientX / this.canvas.width  - 1.0;
+            if (this.lastUpdateCall)
+                cancelAnimationFrame(this.lastUpdateCall);
+
+            var localPositionX = 2.0 * e.clientX / this.canvas.width - 1.0;
             var localPositionY = -2.0 * e.clientY / this.canvas.height + 1.0;
             var localPositionZ = -1.0;
 
             var point3D = [localPositionX, localPositionY, localPositionZ, 1.0];
-            
+
             var invViewMatrix = mat4.create();
             var invProjMatrix = mat4.create();
 
             mat4.inverse(this.projMatrix, invProjMatrix);
             mat4.inverse(this.viewMatrix, invViewMatrix);
-    
+
             mat4.multiplyVec4(invProjMatrix, point3D);
             mat4.multiplyVec4(invViewMatrix, point3D);
 
@@ -335,12 +349,20 @@ ThreeDEngine.prototype =
             var dY = newY - this.lastMouseY;
 
             var translation = vec3.create([-dX * this.camera.position[1] / 1000.0, 0, -dY * this.camera.position[1] / 1000.0]);
-            
+
             vec3.add(this.camera.lookAt, translation, this.camera.lookAt);
             vec3.add(this.camera.position, translation, this.camera.position);
-            
+
             this.lastMouseX = newX;
             this.lastMouseY = newY;
+
+
+            
+
+            this.lastUpdateCall = requestAnimationFrame(function() {
+                requestAnimationFrame(this.renderScene.bind(this));
+
+            });
 
         }.bind(this);
 
