@@ -54,7 +54,7 @@ XMap.DOM.Events =
 
     menuonclick: function() {
         if (this._toggleOn) {
-            document.getElementById("floating-div").style.transform = "translate(0px)";
+            document.getElementById("floating-div").style.transform = "translate(10px)";
             this._toggleOn = false;
         } else {
             document.getElementById("floating-div").style.transform = "translate(-440px)";

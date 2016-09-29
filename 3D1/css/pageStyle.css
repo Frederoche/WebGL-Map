@@ -20,7 +20,7 @@
     background-position-x: 0px;
     background-position-y: -7px;
     top: 5px;
-    left: 0;
+    left: 10px;
     border: none;
 }
 
@@ -32,9 +32,10 @@
     z-index: 2;
     position: absolute;
     top: 5px;
-    left: 50px;
+    left: 60px;
     border: none;
     font-size: 20px;
+    outline: none;
 }
 
 #coordinate::-webkit-input-placeholder {font-style: italic; padding-left:5px;}
@@ -43,11 +44,11 @@
 
 #autocomplete {
     display: none;
-    width: 360px;
+    width: 340px;
     z-index: 2;
     position: absolute;
     top: 29px;
-    left: 40px;
+    left: 60px;
     border: none;
     font-size: 18px;
     cursor: auto;
@@ -65,6 +66,7 @@
     padding: 5px;
     list-style: none;
     cursor: pointer;
+    font-size: 13px;
 }
 
 #autocomplete li img {
@@ -211,7 +213,7 @@ body
 #floating-div 
 {
     transform: translate(-440px);
-    width:440px;
+    width:430px;
     height: 100vh;
     z-index:1;
     position : absolute;
