@@ -443,11 +443,17 @@ ThreeDEngine.prototype =
 
         
 
+        
+
+        if (this.lastUpdateCall)
+            cancelAnimationFrame(this.lastUpdateCall);
+
         //PSEUDO-INSTANCED
         this.quadtree.setProgram();
             this.quadtree.setMatrixUniforms(this.projMatrix, this.viewMatrix, this._spherify, this.camera);
             this.quadtree.draw(this.wireFrame, this.frustum, this.quadtree.rootNode, this.ext, 3600, this.tileUrl, this._spherify, this.Wms);
-        this.quadtree.disableProgram();
+            this.quadtree.disableProgram();
+
         
         //BBOX
         if (this.showBBox) {
@@ -456,6 +462,10 @@ ThreeDEngine.prototype =
             this.quadtree.drawBBox(this.frustum, this.quadtree.rootNode, 3600);
             this.quadtree.disableProgram();
         }
+
+        this.lastUpdateCall = requestAnimationFrame(function () {
+            this.renderScene();
+        }.bind(this));
 
         if (this._birdCamOn)
             this.frustum.drawFrustum(this.projMatrix, this.viewMatrix);
