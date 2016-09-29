@@ -203,6 +203,8 @@ Quadtree.prototype =
                     //dist/1.8 spherify
                 }
             }
+
+            return;
         }
     }
 };

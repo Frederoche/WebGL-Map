@@ -4,7 +4,8 @@
     {
        var body = document.getElementsByTagName("body")[0];
 
-        body.addEventListener("load", function() {
+       body.addEventListener("load", function ()
+       {
             document.getElementById("menu").addEventListener("click", function() { XMap.DOM.Events.menuonclick(); }, false);
             document.getElementById("bing-tile").addEventListener("click", function() { XMap.Engine._engine.setTileUrl(XMap.Url.tileUrlBing); }, false);
             document.getElementById("sk-tile").addEventListener("click", function() { XMap.Engine._engine.setTileUrl(XMap.Url.tileUrlStatensKartverk); }, false);

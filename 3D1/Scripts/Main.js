@@ -183,8 +183,8 @@ ThreeDEngine.prototype =
             var displayHeight = window.innerHeight;
             
 
-            if (this.canvas.width != displayWidth ||
-                this.canvas.height != displayHeight) {
+            if (this.canvas.width !== displayWidth ||
+                this.canvas.height !== displayHeight) {
 
 
                 this.canvas.width = displayWidth;
@@ -235,45 +235,45 @@ ThreeDEngine.prototype =
 
         this.wireFrame = window.device.TRIANGLES;
 
-        this.canvas.onmousewheel = function (e)
-        {
+        var mouseWheel = function(e) {
             if (this.camera.position[1] < 11.0 && this.camera.position[1] >= 2.0) {
                 this.camera.speed = 0.25;
-            }
-            else if (this.camera.position[1] < 2.0 && this.camera.position[1] >= 1.0) {
+            } else if (this.camera.position[1] < 2.0 && this.camera.position[1] >= 1.0) {
                 this.camera.speed = 0.05;
-            }
-            else if (this.camera.position[1] < 1.0 && this.camera.position[1]>=0.1) {
+            } else if (this.camera.position[1] < 1.0 && this.camera.position[1] >= 0.1) {
                 this.camera.speed = 0.005;
-            }
-            else if (this.camera.position[1] < 0.1) {
+            } else if (this.camera.position[1] < 0.1) {
                 this.camera.speed = 0.0005;
-            }
-
-            else {
+            } else {
                 this.camera.speed = 5.0;
             }
-            if (e.wheelDelta > 0)
-            {
+
+
+            var delta = e.wheelDelta ? e.wheelDelta : -e.detail;
+
+            if (delta > 0) {
                 this.camera.moveForward();
                 this.birdCamera.moveForward();
-            }
-            else
-            {
+            } else {
                 this.camera.moveBackward();
                 this.birdCamera.moveBackward();
             }
-        }.bind(this);
 
-        this.canvas.onmousedown = function (e)
-        {
+        };
+
+        var mouseDown = function(e) {
             this.mousemove = true;
 
             this.lastMouseX = e.clientX;
             this.lastMouseY = e.clientY;
+        };
 
-        }.bind(this);
-      
+       
+        this.canvas.addEventListener('mousewheel', mouseWheel.bind(this), false);
+        this.canvas.addEventListener('DOMMouseScroll', mouseWheel.bind(this), false);
+        this.canvas.addEventListener('mousedown', mouseDown.bind(this), false);
+
+
         document.getElementById("coordinate").onkeyup = function (e) {
             
             document.getElementById("autocomplete").style.display = 'block';
