@@ -90,33 +90,34 @@ Buffer.prototype =
 
     _createShaderProgram: function ()
     {
-        this.ext = device.getExtension("ANGLE_instanced_arrays");
+      
+            device.attachShader(this._shaderProgram, this._vertexShader);
+            device.attachShader(this._shaderProgram, this._fragmentShader);
 
-        device.attachShader(this._shaderProgram, this._vertexShader);
-        device.attachShader(this._shaderProgram, this._fragmentShader);
-        device.linkProgram(this._shaderProgram);
+            device.linkProgram(this._shaderProgram);
+            
+            device.useProgram(this._shaderProgram);
 
-        device.useProgram(this._shaderProgram);
+            this._shaderProgram.vertexPositionAttribute = device.getAttribLocation(this._shaderProgram, "position");
+            device.enableVertexAttribArray(this._shaderProgram.vertexPositionAttribute);
 
-        this._shaderProgram.vertexPositionAttribute = device.getAttribLocation(this._shaderProgram, "position");
-        device.enableVertexAttribArray(this._shaderProgram.vertexPositionAttribute);
+            if (this._isTexture) {
+                this._shaderProgram.textureCoordAttribute = device.getAttribLocation(this._shaderProgram, "texCoord");
+                device.enableVertexAttribArray(this._shaderProgram.textureCoordAttribute);
+            }
+
+            this._shaderProgram.pMatrixUniform = device.getUniformLocation(this._shaderProgram, "projMatrix");
+            this._shaderProgram.mvMatrixUniform = device.getUniformLocation(this._shaderProgram, "viewMatrix");
+            this._shaderProgram.translationVector = device.getUniformLocation(this._shaderProgram, "translationVector");
+            this._shaderProgram.gridColor = device.getUniformLocation(this._shaderProgram, "gridColor");
+            this._shaderProgram.scaleFactor = device.getUniformLocation(this._shaderProgram, "scaleFactor");
+            this._shaderProgram.spherify = device.getUniformLocation(this._shaderProgram, "spherify");
+            this._shaderProgram.cameraPosition = device.getUniformLocation(this._shaderProgram, "cameraPosition");
+
+            this._shaderProgram.samplerUniform = device.getUniformLocation(this._shaderProgram, "sampler");
+            this._shaderProgram.elevationSamplerUniform = device.getUniformLocation(this._shaderProgram, "elevationSampler");
+            device.useProgram(null);
         
-        if (this._isTexture) {
-            this._shaderProgram.textureCoordAttribute = device.getAttribLocation(this._shaderProgram, "texCoord");
-            device.enableVertexAttribArray(this._shaderProgram.textureCoordAttribute);
-        }
-
-        this._shaderProgram.pMatrixUniform  = device.getUniformLocation(this._shaderProgram, "projMatrix");
-        this._shaderProgram.mvMatrixUniform = device.getUniformLocation(this._shaderProgram, "viewMatrix");
-        this._shaderProgram.translationVector = device.getUniformLocation(this._shaderProgram, "translationVector");
-        this._shaderProgram.gridColor = device.getUniformLocation(this._shaderProgram, "gridColor");
-        this._shaderProgram.scaleFactor = device.getUniformLocation(this._shaderProgram, "scaleFactor");
-        this._shaderProgram.spherify = device.getUniformLocation(this._shaderProgram, "spherify");
-        this._shaderProgram.cameraPosition = device.getUniformLocation(this._shaderProgram, "cameraPosition");
-        
-        this._shaderProgram.samplerUniform = device.getUniformLocation(this._shaderProgram, "sampler");
-        this._shaderProgram.elevationSamplerUniform = device.getUniformLocation(this._shaderProgram, "elevationSampler");
-        device.useProgram(null);
     },
 
     createBBox: function (vertices, indices) {
@@ -295,7 +296,7 @@ Buffer.prototype =
         device.bindTexture(device.TEXTURE_2D, null);
     },
 
-    drawInstanced : function(wireframe) {
+    drawInstanced: function (wireframe) {
         device.drawElements(wireframe, this._indexBuffer.numItems, device.UNSIGNED_INT, 0);
     },
 

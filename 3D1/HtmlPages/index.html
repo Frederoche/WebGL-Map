@@ -51,8 +51,6 @@
         return vec4(512.0 * cos(lat) * cos(lon), 512.0 * cos(lat) * sin(lon), 512.0 * sin(lat), 1.0);
         }
 
-
-
         vec3 calculateNormals(sampler2D sampler, vec2 textureCoord)
         {
         float NORMAL_OFF = (1.0 / 256.0);
@@ -138,7 +136,7 @@
         uniform vec3 gridColor;
         uniform vec3 cameraPosition;
 
-        uniform sampler2D elevationSampler;
+        
 
         vec3 applyFog(vec3 originalColor, vec3 view)
         {
