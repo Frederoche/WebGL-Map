@@ -266,9 +266,9 @@ ThreeDEngine.prototype =
            
 
             this.lastUpdateCall = requestAnimationFrame(function () {
-                requestAnimationFrame(this.renderScene.bind(this));
+                this.renderScene();
 
-            });
+            }.bind(this));
 
         };
 
@@ -321,9 +321,6 @@ ThreeDEngine.prototype =
        
         document.onmousemove = function (e)
         {
-            if (this.lastUpdateCall)
-                cancelAnimationFrame(this.lastUpdateCall);
-
             var localPositionX = 2.0 * e.clientX / this.canvas.width - 1.0;
             var localPositionY = -2.0 * e.clientY / this.canvas.height + 1.0;
             var localPositionZ = -1.0;
@@ -356,13 +353,12 @@ ThreeDEngine.prototype =
             this.lastMouseX = newX;
             this.lastMouseY = newY;
 
-
+            if (this.lastUpdateCall)
+                cancelAnimationFrame(this.lastUpdateCall);
             
-
             this.lastUpdateCall = requestAnimationFrame(function() {
-                requestAnimationFrame(this.renderScene.bind(this));
-
-            });
+                this.renderScene();
+            }.bind(this));
 
         }.bind(this);
 
@@ -423,13 +419,13 @@ ThreeDEngine.prototype =
     },
 
     setTileUrl: function (tileUrl) {
-        debugger;
+        
         this.tileUrl = tileUrl;
     },
 
     renderScene: function () {
         
-        this.animationframeId = requestAnimationFrame(this.renderScene.bind(this));
+        this.lastUpdateCall = requestAnimationFrame(this.renderScene.bind(this));
         device.clear(device.COLOR_BUFFER_BIT | device.DEPTH_BUFFER_BIT);
         
         document.onkeydown = this.keyboard.bind(this);
