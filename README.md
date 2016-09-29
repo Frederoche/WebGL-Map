@@ -11,4 +11,5 @@ It is based on a quadtree structure.
 Further work:
 
 - Rewrite the proxy from C# to Nodejs
-- Improvment on requestAnimationFrame handler 
+- Improvment on requestAnimationFrame handler
+- Make it possible to use the map without mouse event handler (mobile, tablette)
