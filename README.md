@@ -1,5 +1,5 @@
 # WebGL-Map
-This is an attempt to make a world map in webgl. 
+A world map in webgl. 
 It is writen in pure javascript without the use of extrenal libraries.
 It is based on a quadtree structure.
 
