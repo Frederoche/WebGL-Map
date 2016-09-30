@@ -91,6 +91,7 @@
     <Content Include="Images\pin_marker-256.png" />
     <Content Include="Images\search.png" />
     <Content Include="Images\threelines.png" />
+    <Content Include="NodeServer\ProxyServer.js" />
     <Content Include="Scripts\BoundingBox.js" />
     <Content Include="Scripts\Buffer.js" />
     <Content Include="Scripts\Camera.js" />

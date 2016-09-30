@@ -38,37 +38,37 @@ Chunck.prototype =
                 if (i == 0 && j> 0)
                 {
                     vertices[k] = -1 + 2 * (j - 1) / this.size;
-                    vertices[k + 1] = -0.2;
+                    vertices[k + 1] = -0.02;
                     vertices[k + 2] = -1 + 2 * i / this.size;
                 }
 
                 else if (i > 0 && j == 0)
                 {
                     vertices[k] = -1 + 2 * j  / this.size;
-                    vertices[k + 1] = -0.2;
+                    vertices[k + 1] = -0.02;
                     vertices[k + 2] = -1 + 2 * (i - 1)/ this.size;
                 }
                 else if (i == 0 && j == 0) {
                     vertices[k] = -1 + 2 * j / this.size;
-                    vertices[k + 1] = -0.2;
+                    vertices[k + 1] = -0.02;
                     vertices[k + 2] = -1 + 2 * i / this.size;
                 }
 
                 else if (i == (this.size + 2) && j <(this.size+2)) {
                     vertices[k] = -1 + 2 * (j - 1) / this.size;
-                    vertices[k + 1] = -0.2;
+                    vertices[k + 1] = -0.02;
                     vertices[k + 2] = -1 + 2 * (i - 2) / this.size;
                 }
 
                 else if (j == (this.size + 2) && i < (this.size + 2)) {
                     vertices[k] = -1 + 2 * (j - 2) / this.size;
-                    vertices[k + 1] = -0.2;
+                    vertices[k + 1] = -0.02;
                     vertices[k + 2] = -1 + 2 * (i - 1) / this.size;
                 }
 
                 else if (j == (this.size + 2) && i == (this.size + 2)) {
                     vertices[k] = -1 + 2 * (j - 2) / this.size;
-                    vertices[k + 1] = -0.2;
+                    vertices[k + 1] = -0.02;
                     vertices[k + 2] = -1 + 2 * (i - 2) / this.size;
                 }
 

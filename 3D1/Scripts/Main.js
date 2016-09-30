@@ -413,7 +413,7 @@ ThreeDEngine.prototype =
         }
         else
         {
-            mat4.perspective(45, device.viewportWidth / device.viewportHeight, 0.001, 2000, this.projMatrix);
+            mat4.perspective(45, device.viewportWidth / device.viewportHeight, 0.0001, 2000, this.projMatrix);
             mat4.lookAt(this.camera.position, this.camera.lookAt, this.camera.up, this.viewMatrix);
         }
     },
@@ -434,6 +434,9 @@ ThreeDEngine.prototype =
         
         this._displayPosition();
 
+        if (this.lastUpdateCall)
+            cancelAnimationFrame(this.lastUpdateCall);
+
         this.frustum.extractPlanes(this.camera);
 
         if (this._spherify)
@@ -442,11 +445,6 @@ ThreeDEngine.prototype =
             device.disable(device.CULL_FACE);
 
         
-
-        
-
-        if (this.lastUpdateCall)
-            cancelAnimationFrame(this.lastUpdateCall);
 
         //PSEUDO-INSTANCED
         this.quadtree.setProgram();

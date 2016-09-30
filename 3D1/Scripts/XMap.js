@@ -1,7 +1,7 @@
 ﻿XMap = window.XMap || {};
 
 XMap.Proxy= {
-    proxyUrl: 'http://localhost:51817/Proxy.ashx?server='
+    proxyUrl: 'http://localhost:51817/Proxy.ashx?server=' //'http://localhost:8000/image?server='
 }
 
 XMap.Url =
