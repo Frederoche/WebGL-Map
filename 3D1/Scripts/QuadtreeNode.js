@@ -98,7 +98,7 @@ QuadtreeNode.prototype =
 
     getTexture: function (ext, callback)
     {
-        if (this.texture === null) {
+        
             this.texture = device.createTexture();
             var image = new Image(256, 256);
 
@@ -123,7 +123,7 @@ QuadtreeNode.prototype =
             image.addEventListener("load", success.bind(this), false);
 
             image.src = this.texturePath;
-        }
+        
     },
 
     getElevationFromWms: function (url, callback)
