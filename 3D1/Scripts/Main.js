@@ -413,7 +413,7 @@ ThreeDEngine.prototype =
         }
         else
         {
-            mat4.perspective(45, device.viewportWidth / device.viewportHeight, 0.0001, 2000, this.projMatrix);
+            mat4.perspective(45, device.viewportWidth / device.viewportHeight, 0.01, 2000, this.projMatrix);
             mat4.lookAt(this.camera.position, this.camera.lookAt, this.camera.up, this.viewMatrix);
         }
     },
