@@ -178,7 +178,9 @@ Quadtree.prototype =
                     
                 }
                 if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1)
-                    this.draw(wireframe, frustum, node.parent, ext, delta /2.0, tile, spherify, Wms);
+                    this.draw(wireframe, frustum, node.parent, ext, delta / 2.0, tile, spherify, Wms);
+                else
+                    return;
             }
         }
         else

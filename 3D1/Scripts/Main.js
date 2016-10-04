@@ -434,9 +434,6 @@ ThreeDEngine.prototype =
         
         this._displayPosition();
 
-        if (this.lastUpdateCall)
-            cancelAnimationFrame(this.lastUpdateCall);
-
         this.frustum.extractPlanes(this.camera);
 
         if (this._spherify)
@@ -444,12 +441,13 @@ ThreeDEngine.prototype =
         else
             device.disable(device.CULL_FACE);
 
-        
+        if (this.lastUpdateCall)
+            cancelAnimationFrame(this.lastUpdateCall);
 
         //PSEUDO-INSTANCED
         this.quadtree.setProgram();
             this.quadtree.setMatrixUniforms(this.projMatrix, this.viewMatrix, this._spherify, this.camera);
-            this.quadtree.draw(this.wireFrame, this.frustum, this.quadtree.rootNode, this.ext, 3600, this.tileUrl, this._spherify, this.Wms);
+            this.quadtree.draw(this.wireFrame, this.frustum, this.quadtree.rootNode, this.ext, 3600, this.tileUrl, this._spherify, this.Wms, this.lastUpdateCall);
             this.quadtree.disableProgram();
 
         
