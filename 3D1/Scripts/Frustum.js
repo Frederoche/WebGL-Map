@@ -208,15 +208,15 @@ Frustum.prototype =
 
     isBoxInsideFrustum: function(bbox) //True = INSIDE, False = OUTSIDE
     {
-        var outside = 0;
-        var inside = 0;
+        var outside;
+        var inside;
 
         for (var l = 0; l < 6; l++)
         {
             outside = 0;
             inside = 0;
 
-            for (var k = 0; k < 8 && (inside == 0 || outside == 0) ; k++)
+            for (var k = 0; k < 8 && (inside === 0 || outside === 0) ; k++)
             {
                 if (this.planes[l].distanceToPoint(bbox.getPoints()[k]) < 0) {
                     outside++;

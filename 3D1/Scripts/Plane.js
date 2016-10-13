@@ -20,7 +20,7 @@ Plane.prototype =
         vec3.subtract(p3, p1, vec2);
 
         vec3.cross(vec1, vec2, result);
-        //vec3.normalize(result, result);
+        
         
         this.a = result[0];
         this.b = result[1];
