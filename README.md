@@ -15,3 +15,6 @@ Further work:
 - Improvment on requestAnimationFrame handler
 - Make it possible to use the map without mouse event handler (mobile, tablette)
 - Make it possible to Spherify the earth.
+
+# License
+ http://www.apache.org/licenses/
