@@ -17,4 +17,4 @@ Further work:
 - Make it possible to Spherify the earth.
 
 # License
- http://www.apache.org/licenses/
+ https://github.com/Frederoche/WebGL-Map/blob/master/Licence.js
