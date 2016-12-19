@@ -1,13 +1,13 @@
 ﻿XMap = window.XMap || {};
 
 XMap.Proxy= {
-    proxyUrl: 'http://localhost:51817/Proxy.ashx?server=' //'http://localhost:8000/image?server='
+    proxyUrl: 'http://localhost:8000/image?server=' //'http://localhost:8000/image?server='
 }
 
 XMap.Url =
 {
-    apiOrto: 'http://localhost:51817/Image/GetOrtoFoto?',
-    apiElevation: 'http://localhost:51817/Image/GetOrtoFoto?',
+    apiOrto: 'http://localhost:8000/Image/GetOrtoFoto?',
+    apiElevation: 'http://localhost:8000/Image/GetOrtoFoto?',
     tileUrlBing: { pre: XMap.Proxy.proxyUrl + "http://t0.tiles.virtualearth.net/tiles/a", su: ".jpeg?g=854&mkt=en-US&token=Anz84uRE1RULeLwuJ0qKu5amcu5rugRXy1vKc27wUaKVyIv1SVZrUjqaOfXJJoI0", tile: false },
     tileUrlStatensKartverk: { pre: XMap.Proxy.proxyUrl + "http://www.webatlas.no/maptiles/tiles/webatlas-orto-newup/wa_grid/", su: ".jpeg", tile: true },
     tileUrlthunderForest: { pre:XMap.Proxy.proxyUrl + "http://tile.thunderforest.com/cycle/", su: ".png", tile: true },
@@ -24,8 +24,6 @@ XMap.Canvas = {
     create: function() {
         this._canvas = document.createElement("canvas");
         this._canvas.id = "canvasId";
-        this._canvas.width = 1920;
-        this._canvas.height = 1099;
         document.getElementsByTagName('body')[0].appendChild(this._canvas);
         return this._canvas;
     }

@@ -30,6 +30,6 @@ Wms.prototype =
             maxLat = tempLat;
         }
 
-        this.url = 'http://localhost:51817/Proxy.ashx?server=http://www.webatlas.no/wms-orto/?request=getmap&layers=hoyderaster&srs=epsg:4326&format=image/png&width=128&height=128&bbox=' + minLng + ',' + minLat + ',' + maxLng + ',' + maxLat + '&styles=pack_rgb_-25000-25000';
+        this.url = 'http://localhost:8000/image?server=http://www.webatlas.no/wms-orto/?request=getmap&layers=hoyderaster&srs=epsg:4326&format=image/png&width=128&height=128&bbox=' + minLng + ',' + minLat + ',' + maxLng + ',' + maxLat + '&styles=pack_rgb_-25000-25000';
     }
 };

@@ -1,8 +1,11 @@
 ﻿var express = require('express');
 var app = express();
 var http = require('http');
-
+var compression = require('compression');
 var router = express.Router();
+var async = require("async");
+
+http.globalAgent.maxSockets = 100000;
 
 var get = function(url, callback) {
     http.get(url, function(res) {
@@ -19,19 +22,14 @@ var get = function(url, callback) {
         });
     });
 };
-app.use(express.static('HTMLPages', { extensions: ['html', 'htm'] }))
-app.use('*',function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-    res.send('index.html');
-    next();
-});
 
+app.use(express.static('Client'));
+app.use(compression());
+app.set('view cache', true);
 
 app.get('/image/', function (req, res)
 {
+    
     var url = req.originalUrl.split("server=")[1];
     console.log(url);
 
@@ -41,6 +39,10 @@ app.get('/image/', function (req, res)
     });
 
 });
+
+app.use('*', function(req, res) {
+    res.send('index.html')
+})
 
 app.listen(8000);
 console.log("listen To port 8000");

@@ -6,6 +6,7 @@
 device = {};
 
 function ThreeDEngine(canvas, tileUrl, elevationUrl, initialRootSize) {
+    debugger;
     this.canvas = canvas;
     this.doc = document;
 
@@ -163,22 +164,22 @@ ThreeDEngine.prototype =
 
     init: function () {
         window.device = null;
-        window.device = this.canvas.getContext('experimental-webgl', { alpha: false, antialias: true, stencil: false });
+        window.device = this.canvas.getContext('experimental-webgl', { alpha: false, antialias: true, stencil: false }) || window.WebGLRenderingContext;
 
         if(window.device == null)
-            window.device = this.canvas.getContext('webgl');
+            window.device = this.canvas.getContext('experimental-webgl');
 
         var realToCSSPixels = window.devicePixelRatio || 1;
 
-        this.canvas.width  = document.body.clientWidth  * realToCSSPixels;
-        this.canvas.height = document.body.clientHeight * realToCSSPixels;
+        this.canvas.width  = document.body.clientWidth ;
+        this.canvas.height = document.body.clientHeight ;
 
         window.device.viewportWidth  = this.canvas.width;
         window.device.viewportHeight = this.canvas.height;
 
         window.onresize = function ()
         {
-            var displayWidth = window.innerWidth;
+            var displayWidth  = window.innerWidth;
             var displayHeight = window.innerHeight;
             
 
