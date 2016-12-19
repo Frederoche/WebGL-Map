@@ -3,9 +3,10 @@ A world map in webgl.
 It is writen in pure javascript without the use of extrenal libraries.
 It is based on a quadtree structure.
 
-# TO run the project:
+To run the project:
 
-Enter: node ProxyServer.js and enter in your browser: http://localhost:8000
+Enter: node ProxyServer.js in the corresponding project folder,
+enter in your browser: http://localhost:8000
 
 <img src="https://github.com/Frederoche/WebGL-Map/blob/master/World.PNG" width=300>
 
