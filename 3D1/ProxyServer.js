@@ -3,9 +3,15 @@ var app = express();
 var http = require('http');
 var compression = require('compression');
 var router = express.Router();
-var async = require("async");
 
-http.globalAgent.maxSockets = 100000;
+
+
+
+var agent = new http.Agent({
+  keepAlive: true,
+  maxSockets: 100000,
+  keepAliveMsecs: 3000
+})
 
 var get = function(url, callback) {
     http.get(url, function(res) {
