@@ -5,8 +5,10 @@ It is based on a quadtree structure.
 
 To run the project:
 
-Enter: node ProxyServer.js in the corresponding project folder,
-enter in your browser: http://localhost:8000
+#Run the program
+
+Run: node ProxyServer.js in the corresponding project folder 3D1,
+browse to: http://localhost:8000
 
 <img src="https://github.com/Frederoche/WebGL-Map/blob/master/World.PNG" width=300>
 
