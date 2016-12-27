@@ -1,6 +1,4 @@
-﻿/// <reference path="glMatrix.js" />
-
-function Camera(position0, lookAt0, up0, initialtileSize)
+﻿function Camera(position0, lookAt0, up0, initialtileSize)
 {
     this.position = vec3.create(position0);
     this.lookAt = vec3.create(lookAt0);
@@ -13,9 +11,6 @@ function Camera(position0, lookAt0, up0, initialtileSize)
     this.Mercator = new Mercator(initialtileSize);
 };
 
-//PITCH IS WRONG (NEED TO BE RECTIFIED)
-//UP VECTOR NEVER CHANGES. THAT MIGHT BE THE ERROR
-//CAMERA MATRIX
 
 Camera.prototype =
 {
@@ -65,13 +60,55 @@ Camera.prototype =
     },
 
     lookUp: function () {
-        this.pitch += 0.01;
+        this.pitch += 0.03;
         vec3.add(this.position, [Math.cos(this.angle) * Math.sin(this.pitch), Math.cos(this.pitch), Math.sin(this.angle) * Math.sin(this.pitch)], this.lookAt);
     },
 
     lookDown: function () {
-        this.pitch -= 0.01;
+        this.pitch -= 0.03;
         vec3.add(this.position, [Math.cos(this.angle) * Math.sin(this.pitch), Math.cos(this.pitch), Math.sin(this.angle) * Math.sin(this.pitch)], this.lookAt);
-    }
+    },
+
+    _zoomIn : function() 
+    {
+        if (this.position[1] < 11.0 && this.position[1] >= 2.0) {
+            this.speed = 0.25;
+        }
+        else if (this.position[1] < 2.0 && this.position[1] >= 1.0) {
+            this.speed = 0.05;
+        }
+        else if (this.position[1] < 1.0) {
+            this.speed = 0.005;
+        }
+        else if (this.position[1] < 0.1) {
+            this.speed = 0.0005;
+        }
+        else {
+            this.speed = 5.0;
+        }
+
+        this.moveForward();
+    },
+
+    _zoomOut: function () {
+        if (this.position[1] < 11.0 && this.position[1] >= 2.0) {
+            this.speed = 0.25;
+        }
+        else if (this.position[1] < 2.0 && this.position[1] >= 1.0) {
+            this.speed = 0.05;
+        }
+        else if (this.position[1] < 1.0) {
+            this.speed = 0.005;
+        }
+        else if (this.position[1] < 0.1) {
+            this.speed = 0.0005;
+        }
+        else {
+            this.speed = 5.0;
+        }
+
+        this.moveBackward();        
+    },
+
 };
 

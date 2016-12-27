@@ -4,8 +4,7 @@ var http = require('http');
 var compression = require('compression');
 var router = express.Router();
 
-
-
+app.use(express.static('Client'));
 
 var agent = new http.Agent({
   keepAlive: true,
@@ -13,7 +12,10 @@ var agent = new http.Agent({
   keepAliveMsecs: 3000
 })
 
+
+
 var get = function(url, callback) {
+
     http.get(url, function(res) {
 
         var output = '';
@@ -29,7 +31,7 @@ var get = function(url, callback) {
     });
 };
 
-app.use(express.static('Client'));
+
 app.use(compression());
 app.set('view cache', true);
 
@@ -37,10 +39,12 @@ app.get('/image/', function (req, res)
 {
     
     var url = req.originalUrl.split("server=")[1];
+
+    
     console.log(url);
 
     get(url, function (result) {
-        res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+        res.writeHead(200, { 'Content-Type': 'image/jpeg', 'Content-Length':result.length,'Cache-Control':'public, max-age:31536000' });
         res.end(result, 'binary');
     });
 
@@ -52,5 +56,3 @@ app.use('*', function(req, res) {
 
 app.listen(8000);
 console.log("listen To port 8000");
-
-

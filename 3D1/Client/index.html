@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+<meta http-equiv="Cache-control" content="public">
 <head>
     <link rel="icon" type="image/png" href="../Images/map-8.png" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0">
@@ -12,7 +13,7 @@
     <script src="../Scripts/Geocoding.js"></script>
     <script src="../Scripts/Plane.js"></script>
     <script src="../Scripts/Camera.js"></script>
-    <script src="../Scripts/Main.js"></script>
+    <script src="../Scripts/Engine.js"></script>
     <script src="../Scripts/Buffer.js"></script>
     <script src="../Scripts/BoundingBox.js"></script>
     <script src="../Scripts/Chunck.js"></script>
@@ -21,8 +22,6 @@
     <script src="../Scripts/Wms.js"></script>
     <script src="../Scripts/Frustum.js"></script>
     <script src="../Scripts/XMap.js"></script>
-    <script src="../Scripts/XMAP.DOM.js"></script>
-    <script src="../Scripts/Init.js"></script>
     <script type="x-shader/x-vertex" id="vShader">
         precision mediump float;
 
@@ -43,13 +42,6 @@
         varying vec3 viewSpace;
         varying vec3 worldPosition;
 
-        vec4 makeSphere(vec4 translatedPosition)
-        {
-        float lon = translatedPosition.x/162.9;
-        float lat = 2.0 * atan(exp(translatedPosition.z/162.9)) - 3.1415/2.0;
-
-        return vec4(512.0 * cos(lat) * cos(lon), 512.0 * cos(lat) * sin(lon), 512.0 * sin(lat), 1.0);
-        }
 
         vec3 calculateNormals(sampler2D sampler, vec2 textureCoord)
         {
@@ -106,14 +98,9 @@
 
         vec4 pos;
 
-        if(spherify == 1.0)
-        {
-        pos = makeSphere(translatedPosition);
-        }
-        else
-        {
+        
         pos = translatedPosition;
-        }
+        
 
         texcoord = texCoord;
         gl_Position = projMatrix  *  viewMatrix * pos;
@@ -157,7 +144,7 @@
 
         void main(void)
         {
-        vec4 ambiantColor =  vec4(0.3,0.3,0.3,1.0);
+        vec4 ambiantColor =  vec4(0.39,0.58,0.92,1.0);
         vec4 diffuseColor =  vec4(0.9,0.9,0.9,1.0);
         vec4 specularColor = vec4(0.8,0.8,0.8,1.0);
 
@@ -175,7 +162,8 @@
 
         vec4 texture = texture2D(sampler, texcoord);
 
-        vec4 finalColor = ambiantColor * texture;
+
+        vec4 finalColor = ambiantColor * texture*texture;
 
         if(dot(normals.xyz, -lightDir) > 0.0)
         {
@@ -239,7 +227,7 @@
     </script>
     <title>X-Map</title>
 </head>
-<body onload="loadWebgl();">
+<body>
     
     <button id="menu"></button><div id="enter"></div>
         <input type="text" id="coordinate" placeholder="Search a place..." onclick="javascript:this.value='';" />
@@ -274,9 +262,9 @@
 
         <label id="wireframe-lbl">Wireframe</label><input type="checkbox" id="wireframe" />
         <label id="bird-cam-lbl">Bird-Cam</label><input type="checkbox" id="bird-cam" />
-        <label id="spherify-lbl">Spherify</label><input type="checkbox" id="spherify" />
-        <label id="bbox-lbl">BBox</label><input type="checkbox" id="bbox" />
-        <label id="Wms-lbl">WMS</label><input type="checkbox" id="Wms" />
+        <label id="spherify-lbl" hidden="hidden">Spherify</label><input type="checkbox" id="spherify"hidden="hidden"> />
+        <label id="bbox-lbl" hidden="hidden">>BBox</label><input type="checkbox" id="bbox" hidden="hidden">/>
+        <label id="Wms-lbl" hidden="hidden">>WMS</label><input type="checkbox" id="Wms" hidden="hidden">/>
     </div>
     <button id="mylocation"></button>
     <button id="zoomin"></button>

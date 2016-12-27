@@ -16,7 +16,7 @@ function Quadtree(option)
 
     this._build(this.rootNode);
     this._Wms = new Wms(option.initialRootSize);
-    
+    this.counter = 0;
 
 };
 
@@ -39,8 +39,6 @@ Quadtree.prototype =
     _removeChilds : function(node) {
         node.child = [];
     },
-
-
 
     _addNode: function (node)
     {
@@ -96,117 +94,86 @@ Quadtree.prototype =
         this.chunck.disableProgram();
     },
 
-    drawBBox: function (frustum, node, delta)
-    {
-        if (node === undefined || !frustum.isBoxInsideFrustum(node.bbox))
-            return;
-
-
-        this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - this.nodeCenter[0]) * (frustum.position[0] - this.nodeCenter[0]) +
-                                              (frustum.position[1] - this.nodeCenter[1]) * (frustum.position[1] - this.nodeCenter[1]) +
-                                              (frustum.position[2] - this.nodeCenter[2]) * (frustum.position[2] - this.nodeCenter[2]));
-
-        if (this.chunckDistFromCamera > delta && node.type === 1)
-        {
-            this.chunck.prerenderBbox(node);
-            this.chunck.drawBBox();
-        }
-        else
-        {
-            for (var i = 0; i < 4; i++) {
-                this.drawBBox(frustum, node.child[i], delta / 2.0);
-            }
-        }
-    },
-
-
-    draw: function (wireframe, frustum, node, ext, delta, tile, spherify, Wms) {
+    //node.type == 2 ---->leaf
+    draw: function (wireframe, frustum, node, ext, delta, tile, Wms) {
         
-        if (node === undefined || !frustum.isBoxInsideFrustum(node.bbox)) {
+        if (node === undefined || !frustum.isBoxInsideFrustum(node.bbox)) 
             return;
-        }
+        
 
-        if (spherify)
-            this.nodeCenter = node.spherifyCenter;
-        else
-            this.nodeCenter = node.center;
+        this.nodeCenter = node.center;
 
-        //SHOULD BE NODE OUTER BORDER.
         this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - this.nodeCenter[0]) * (frustum.position[0] - this.nodeCenter[0]) +
                                               (frustum.position[1] - this.nodeCenter[1]) * (frustum.position[1] - this.nodeCenter[1]) +
                                               (frustum.position[2] - this.nodeCenter[2]) * (frustum.position[2] - this.nodeCenter[2]));
 
         if (this.chunckDistFromCamera > delta && node.type === 1) {
             
-            if (spherify)
-                node.updateBBoxToSphere();
-            else
-                node._constructBBox(false);
-           
             if (tile !== node.initialtexturePath)
             {
                 node.updateTexturePath(tile);
             }
-            
-            if (node.parent!=undefined && node.parent.child[0].textureLoaded && node.parent.child[0].elevationLoaded
+
+            if (node.parent!== undefined 
+                && node.parent.child[0].textureLoaded && node.parent.child[0].elevationLoaded
                 && node.parent.child[1].textureLoaded && node.parent.child[1].elevationLoaded
                 && node.parent.child[2].textureLoaded && node.parent.child[2].elevationLoaded
                 && node.parent.child[3].textureLoaded && node.parent.child[3].elevationLoaded) {
                
                 this.chunck.prerender(node);
                 this.chunck.draw(wireframe);
-                     
+                return; 
             }
-            else
-            {
-                if (!node.textureLoaded && node.type === 1) {
-                    
-                    node.getTexture(ext, function ()
-                    {
-                        node.textureLoaded = true;
-
-                    }.bind(this));
-                }
-
-                if (!node.elevationLoaded && node.type === 1) {
-                    this._Wms.prepareRequest(node);
-
-                    node.getElevationFromWms(this._Wms.url, function ()
-                    {
-                        node.elevationLoaded = true;
-                    }.bind(this));
-                    
-                }
-                if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1)
-                    this.draw(wireframe, frustum, node.parent, ext, delta / 2.0, tile, spherify, Wms);
-                else
-                    return;
+            
+            if (!node.textureLoaded  && this.counter < 7) {
+                
+                node.getTexture(ext, function ()
+                {
+                    node.textureLoaded = true;
+                });
+                this.counter++;
             }
+
+            if (!node.elevationLoaded  && this.counter < 7) {
+                this._Wms.prepareRequest(node);
+
+                node.getElevationFromWms(this._Wms.url, function ()
+                {
+                    node.elevationLoaded = true;   
+                });
+
+                this.counter++;
+            }
+
+            //Blurring
+            if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1)
+                this.draw(wireframe, frustum, node.parent, ext, delta , tile, Wms);
+                
         }
         else
         {
             if (node.type !== 1)
             {
-                this.draw(wireframe, frustum, node.parent, ext, delta / 2.0, tile, spherify, Wms);
+                //Blurring
+                this.draw(wireframe, frustum, node.parent, ext, delta , tile, Wms);
 
                 this._Wms.prepareRequest(node);
 
                 node.getElevationFromWms(this._Wms.url, function ()
                 {
-                    this._addNode(node);   
+                    this._addNode(node);
+
                 }.bind(this));
-                return;
+
+                this.counter++;
             }
-            else
+            else if(node.type === 1 && node.child.length > 0)
             {
-                for (var i = 0; i < 4; i++) {
-                    
-                    this.draw(wireframe, frustum, node.child[i], ext, delta/2.0, tile, spherify, Wms); //Problem  here with coefficient
-                    //dist/1.8 spherify
+                for (var i = 0; i < 4; i++) 
+                {    
+                    this.draw(wireframe, frustum, node.child[i], ext, delta/2.0, tile, Wms); 
                 }
             }
-
-            return;
         }
     }
 };
