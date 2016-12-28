@@ -70,32 +70,28 @@ QuadtreeNode.prototype =
 
     getTexture: function (ext, callback)
     {
-        
-            this.texture = device.createTexture();
-            var image = new Image(256, 256);
+        this.texture = device.createTexture();
+        var image = new Image(256, 256);
 
-            var success = function() {
-                device.bindTexture(device.TEXTURE_2D, this.texture);
+        var success = function() {
+            device.bindTexture(device.TEXTURE_2D, this.texture);
+            device.texImage2D(device.TEXTURE_2D, 0, device.RGB, device.RGB, device.UNSIGNED_SHORT_5_6_5, image);
+            device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MAG_FILTER, device.LINEAR);
+            device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MIN_FILTER, device.LINEAR_MIPMAP_LINEAR);
+            device.generateMipmap(device.TEXTURE_2D);
 
-                device.texImage2D(device.TEXTURE_2D, 0, device.RGBA, device.RGBA, device.UNSIGNED_BYTE, image);
-                device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MAG_FILTER, device.LINEAR);
-                device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MIN_FILTER, device.LINEAR_MIPMAP_LINEAR);
-                device.generateMipmap(device.TEXTURE_2D);
+            device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_S, device.CLAMP_TO_EDGE);
+            device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_T, device.CLAMP_TO_EDGE);
+            
+            //if (ext)
+                //  device.texParameterf(device.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 16);
 
-                device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_S, device.CLAMP_TO_EDGE);
-                device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_T, device.CLAMP_TO_EDGE);
+            device.bindTexture(device.TEXTURE_2D, null);
+            callback();
+        };
 
-                if (ext)
-                    device.texParameterf(device.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 16);
-
-                device.bindTexture(device.TEXTURE_2D, null);
-                callback();
-            };
-
-            image.addEventListener("load", success.bind(this), false);
-
-            image.src = this.texturePath;
-        
+        image.addEventListener("load", success.bind(this), false);
+        image.src = this.texturePath;
     },
 
     getElevationFromWms: function (url, callback)

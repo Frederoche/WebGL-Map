@@ -28,7 +28,6 @@ Chunck.prototype =
         var texCoords = [];
 
         var k = 0;
-        var h = 0;
         var n = 0;
         
         for (var i = 0; i < this.size + 3; ++i) //CENTERED ON (0,0,0)
@@ -47,29 +46,34 @@ Chunck.prototype =
                     vertices[k] = -1 + 2 * j  / this.size;
                     vertices[k + 1] = -0.02;
                     vertices[k + 2] = -1 + 2 * (i - 1)/ this.size;
+                    
                 }
                 else if (i == 0 && j == 0) {
                     vertices[k] = -1 + 2 * j / this.size;
                     vertices[k + 1] = -0.02;
                     vertices[k + 2] = -1 + 2 * i / this.size;
+                   
                 }
 
                 else if (i == (this.size + 2) && j <(this.size+2)) {
                     vertices[k] = -1 + 2 * (j - 1) / this.size;
                     vertices[k + 1] = -0.02;
                     vertices[k + 2] = -1 + 2 * (i - 2) / this.size;
+                    
                 }
 
                 else if (j == (this.size + 2) && i < (this.size + 2)) {
                     vertices[k] = -1 + 2 * (j - 2) / this.size;
                     vertices[k + 1] = -0.02;
                     vertices[k + 2] = -1 + 2 * (i - 1) / this.size;
+                   
                 }
 
                 else if (j == (this.size + 2) && i == (this.size + 2)) {
                     vertices[k] = -1 + 2 * (j - 2) / this.size;
                     vertices[k + 1] = -0.02;
                     vertices[k + 2] = -1 + 2 * (i - 2) / this.size;
+                    
                 }
 
                 else
@@ -79,11 +83,11 @@ Chunck.prototype =
                     vertices[k + 2] = -1 + 2 * (i - 1) / this.size;
                 }
                 
-                texCoords[h] = j / (this.size);
-                texCoords[h + 1] = i / (this.size);
+                vertices[k + 3] = j / (this.size);
+                vertices[k + 4] = i / (this.size);
 
-                h += 2;
-                k += 3;
+               
+                k += 5;
             }
         }
 
@@ -103,7 +107,7 @@ Chunck.prototype =
 
         this.buffer = new Buffer("vShader", "fShader", 'vbboxShader', 'fbboxShader');
         this.buffer.init(true);
-        this.buffer.create(vertices, indices, texCoords);
+        this.buffer.create(vertices, indices);
 
         //BBOX
         this.buffer.initBBox();

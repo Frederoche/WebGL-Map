@@ -17,6 +17,7 @@
     this._BboxVertexShader   = {};
     this._BboxFragmentShader = {};
     this.ext = {};
+    this.loaded = false;
 };
 
 Buffer.prototype._isTexture = true;
@@ -137,13 +138,13 @@ Buffer.prototype =
         device.useProgram(null);
     },
 
-    create: function (vertices, indices, texcoords) {
+    create: function (vertices, indices) {
         device.useProgram(this._shaderProgram);
         device.bindBuffer(device.ARRAY_BUFFER, this._vertexBuffer);
 
         device.bufferData(device.ARRAY_BUFFER, new Float32Array(vertices), device.STATIC_DRAW);
-        this._vertexBuffer.numItems = vertices.length / 3;
-        this._vertexBuffer.itemSize = 3;
+        this._vertexBuffer.numItems = vertices.length;
+        this._vertexBuffer.itemSize = 5;
 
         device.bindBuffer(device.ELEMENT_ARRAY_BUFFER, this._indexBuffer);
         device.bufferData(device.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), device.STATIC_DRAW); 
@@ -151,13 +152,6 @@ Buffer.prototype =
         
         this._indexBuffer.itemSize = 1;
 
-        if (texcoords != null)
-        {
-            device.bindBuffer(device.ARRAY_BUFFER, this._texCoordsBuffer);
-            device.bufferData(device.ARRAY_BUFFER, new Float32Array(texcoords), device.STATIC_DRAW);
-            this._texCoordsBuffer.numItems = texcoords.length / 2;
-            this._texCoordsBuffer.itemSize = 2;
-        }
         device.useProgram(null);
     },
 
@@ -212,12 +206,8 @@ Buffer.prototype =
         device.useProgram(this._shaderProgram);
 
         device.bindBuffer(device.ARRAY_BUFFER, this._vertexBuffer);
-        device.vertexAttribPointer(this._shaderProgram.vertexPositionAttribute, this._vertexBuffer.itemSize, device.FLOAT, false, 0, 0);
-        //this.ext.vertexAttribDivisorANGLE(this._shaderProgram.vertexPositionAttribute, 0);
-
-        device.bindBuffer(device.ARRAY_BUFFER, this._texCoordsBuffer);
-        device.vertexAttribPointer(this._shaderProgram.textureCoordAttribute, this._texCoordsBuffer.itemSize, device.FLOAT, false, 0, 0);
-        //this.ext.vertexAttribDivisorANGLE(this._shaderProgram.textureCoordAttribute, 0);
+        device.vertexAttribPointer(this._shaderProgram.vertexPositionAttribute, 3, device.FLOAT, false, 20, 0);
+        device.vertexAttribPointer(this._shaderProgram.textureCoordAttribute, 2, device.FLOAT, false, 20, 12);
     },
 
     setBBboxProgram : function() {
@@ -246,10 +236,8 @@ Buffer.prototype =
 
       device.uniform3fv(this._shaderProgram.cameraPosition,  camera.position);
         
-      if (spherify)
-          device.uniform1f(this._shaderProgram.spherify, 1.0);
-      else
-          device.uniform1f(this._shaderProgram.spherify, 0.0);
+      
+      device.uniform1f(this._shaderProgram.spherify, 0.0);
 
       device.uniform1i(this._shaderProgram.elevationSamplerUniform, 0);
       device.uniform1i(this._shaderProgram.samplerUniform, 1);
@@ -266,19 +254,17 @@ Buffer.prototype =
 
     prerender: function (node) {
         if (!node.elevationLoaded || !node.textureLoaded)
-            return;
-
-        if (node.translationVector !== undefined)
-            device.uniform3fv(this._shaderProgram.translationVector, node.translationVector);
-        
-        if (node.colorVector !== undefined) {
-            device.uniform3fv(this._shaderProgram.gridColor, node.colorVector);
+        {
+                 this.loaded = false;
+                return;
         }
+        this.loaded = true;
+       device.uniform3fv(this._shaderProgram.translationVector, node.translationVector);
+               
+       device.uniform3fv(this._shaderProgram.gridColor, node.colorVector);
 
-        if (node.scaleFactor !== undefined && node.scaleFactor !== this.lastScaleFactor) {
-            this.lastScaleFactor = node.scaleFactor;
-            device.uniform1f(this._shaderProgram.scaleFactor, node.scaleFactor);
-        }
+        this.lastScaleFactor = node.scaleFactor;
+        device.uniform1f(this._shaderProgram.scaleFactor, node.scaleFactor);
 
         device.activeTexture(device.TEXTURE0);
         device.bindTexture(device.TEXTURE_2D, node.elevation);
@@ -297,6 +283,9 @@ Buffer.prototype =
     },
 
     drawInstanced: function (wireframe) {
+        if(this.loaded ===false)
+            return;
+
         device.drawElements(wireframe, this._indexBuffer.numItems, device.UNSIGNED_INT, 0);
     },
 

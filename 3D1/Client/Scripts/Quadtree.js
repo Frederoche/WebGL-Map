@@ -100,9 +100,9 @@ Quadtree.prototype =
         if (node === undefined || !frustum.isBoxInsideFrustum(node.bbox)) 
             return;
         
+        
 
         this.nodeCenter = node.center;
-
         this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - this.nodeCenter[0]) * (frustum.position[0] - this.nodeCenter[0]) +
                                               (frustum.position[1] - this.nodeCenter[1]) * (frustum.position[1] - this.nodeCenter[1]) +
                                               (frustum.position[2] - this.nodeCenter[2]) * (frustum.position[2] - this.nodeCenter[2]));
@@ -125,7 +125,7 @@ Quadtree.prototype =
                 return; 
             }
             
-            if (!node.textureLoaded  && this.counter < 7) {
+            if (!node.textureLoaded  && this.counter < 5) {
                 
                 node.getTexture(ext, function ()
                 {
@@ -134,7 +134,7 @@ Quadtree.prototype =
                 this.counter++;
             }
 
-            if (!node.elevationLoaded  && this.counter < 7) {
+            if (!node.elevationLoaded  && this.counter < 5) {
                 this._Wms.prepareRequest(node);
 
                 node.getElevationFromWms(this._Wms.url, function ()
@@ -148,7 +148,7 @@ Quadtree.prototype =
             //Blurring
             if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1)
                 this.draw(wireframe, frustum, node.parent, ext, delta , tile, Wms);
-                
+    
         }
         else
         {
