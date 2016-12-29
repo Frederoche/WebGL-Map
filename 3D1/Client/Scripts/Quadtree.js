@@ -94,6 +94,30 @@ Quadtree.prototype =
         this.chunck.disableProgram();
     },
 
+    removechild:function(parent)
+    {
+        for(var i =0 ; i < parent.child.length;i++)
+        {
+            if(parent.child[i].texture!==null && parent.child[i].texture.image!==null)
+            {
+                parent.child[i].texture.image.removeEventListener("load",parent.child[i].loadtextureHandler, false);
+                parent.child[i].texture.image = null;
+            }
+
+            if(parent.child[i].elevation!==null && parent.child[i].elevation.image!==null)
+            {
+                parent.child[i].elevation.image.removeEventListener("load",parent.child[i].loadElevation, false);
+                parent.child[i].elevation.image = null;
+            }
+
+            if(parent.child[i].child.length > 0)
+            {
+                this.removechild(parent.child[i])
+                parent.child[i] = null; 
+            }
+        }
+    },
+
     //node.type == 2 ---->leaf
     draw: function (wireframe, frustum, node, ext, delta, tile, Wms) {
         
@@ -104,6 +128,12 @@ Quadtree.prototype =
 
         if(!frustum.isBoxInsideFrustum(node.bbox)){
             node.type = 2;
+
+            if(node.child.length >0)
+            {
+                this.removechild(node);
+            }
+
             node.child = [];
 
             if(node.texture!==null && node.texture.image!==null)
