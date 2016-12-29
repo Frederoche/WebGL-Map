@@ -1,5 +1,4 @@
-﻿///<reference path="webgl.d.ts" />
-function QuadtreeNode(translationVector, scaleFactor, colorVector, center, texturePath, depth, elevationDataTexturePath, nodeNr, node, bbox) {
+﻿function QuadtreeNode(translationVector, scaleFactor, colorVector, center, texturePath, depth, elevationDataTexturePath, nodeNr, node, bbox) {
     this.parent = node;
     this.elevation = null;
     this.texture = null;
@@ -67,7 +66,24 @@ QuadtreeNode.prototype =
         this.initialtexturePath = newTexturePath;
     },
 
-    
+    loadtextureHandler : function(ext,callback)
+    {
+        device.bindTexture(device.TEXTURE_2D, this.texture);
+            
+        device.texImage2D(device.TEXTURE_2D, 0, device.RGBA, device.RGBA, device.UNSIGNED_BYTE, this.texture.image);
+
+        device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MAG_FILTER, device.LINEAR);
+        device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MIN_FILTER, device.LINEAR_MIPMAP_LINEAR);
+        device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_S, device.CLAMP_TO_EDGE);
+        device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_T, device.CLAMP_TO_EDGE);
+            
+        device.texParameterf(device.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 8);
+            
+        device.generateMipmap(device.TEXTURE_2D);
+
+        device.bindTexture(device.TEXTURE_2D, null);
+        callback();
+    },
 
     getTexture: function (ext, callback)
     {
@@ -75,59 +91,41 @@ QuadtreeNode.prototype =
             callback();
 
         this.texture = device.createTexture();
-        var image = new Image(256, 256);
+        this.texture.image = new Image(256, 256);
 
-        var success = function() {
-            device.bindTexture(device.TEXTURE_2D, this.texture);
-            
-            device.texImage2D(device.TEXTURE_2D, 0, device.RGBA, device.RGBA, device.UNSIGNED_BYTE, image);
+        this.texture.image.addEventListener("load", this.loadtextureHandler.bind(this, ext, callback), false);
+        this.texture.image.src = this.texturePath;
+    },
+
+    loadElevation :function(callback)
+    {
+        device.bindTexture(device.TEXTURE_2D, this.elevation);
+
+            device.texImage2D(device.TEXTURE_2D, 0, device.RGBA, device.RGBA, device.UNSIGNED_BYTE, this.elevation.image);
+
+            device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_S, device.CLAMP_TO_EDGE);
+            device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_T, device.CLAMP_TO_EDGE);
 
             device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MAG_FILTER, device.LINEAR);
             device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MIN_FILTER, device.LINEAR_MIPMAP_LINEAR);
-            device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_S, device.CLAMP_TO_EDGE);
-            device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_T, device.CLAMP_TO_EDGE);
-            
-            device.texParameterf(device.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 8);
-            
             device.generateMipmap(device.TEXTURE_2D);
 
             device.bindTexture(device.TEXTURE_2D, null);
+            
             callback();
-        };
-
-        image.addEventListener("load", success.bind(this), false);
-        image.src = this.texturePath;
     },
 
     getElevationFromWms: function (url, callback)
     {
         if(this.elevationLoaded)
             callback();
-            
-        var image = new Image(128, 128);
 
         this.elevation = device.createTexture();
+        this.elevation.image = new Image(128, 128);
         
-        var success = function() {
-            device.bindTexture(device.TEXTURE_2D, this.elevation);
+        this.elevation.image.addEventListener("load", this.loadElevation.bind(this, callback), false);
 
-            device.texImage2D(device.TEXTURE_2D, 0, device.RGBA, device.RGBA, device.UNSIGNED_BYTE, image);
-
-            device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_S, device.CLAMP_TO_EDGE);
-            device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_T, device.CLAMP_TO_EDGE);
-
-            device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MAG_FILTER, device.LINEAR);
-            device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MIN_FILTER, device.LINEAR_MIPMAP_LINEAR);
-            device.generateMipmap(device.TEXTURE_2D);
-
-            device.bindTexture(device.TEXTURE_2D, null);
-
-            callback();
-        };
-
-        image.addEventListener("load", success.bind(this), false);
-
-        image.src = url;
+        this.elevation.image.src = url;
         
     },
 

@@ -97,9 +97,20 @@ Quadtree.prototype =
     //node.type == 2 ---->leaf
     draw: function (wireframe, frustum, node, ext, delta, tile, Wms) {
         
-        if (node === undefined || !frustum.isBoxInsideFrustum(node.bbox)) 
+        if (node === undefined) 
+        {
             return;
-        
+        }
+
+        if(!frustum.isBoxInsideFrustum(node.bbox)){
+            node.type = 2;
+            node.child = [];
+            return;
+        }
+
+        if(frustum.isBoxInsideFrustum(node.bbox) && node.child.length < 4){
+            this._addNode(node);
+        }
         
 
         this.nodeCenter = node.center;
@@ -125,21 +136,31 @@ Quadtree.prototype =
                 return; 
             }
             
-            if (!node.textureLoaded  && this.counter < 5) {
+            if (!node.textureLoaded  && this.counter < 6) {
                 
                 node.getTexture(ext, function ()
                 {
+                    if(node.texture.image ===null)
+                        return;
+
                     node.textureLoaded = true;
+                    node.texture.image.removeEventListener("load",node.loadtextureHandler, false);
+                    node.texture.image = null;
                 });
                 this.counter++;
             }
 
-            if (!node.elevationLoaded  && this.counter < 5) {
+            if (!node.elevationLoaded  && this.counter < 6) {
                 this._Wms.prepareRequest(node);
 
                 node.getElevationFromWms(this._Wms.url, function ()
                 {
-                    node.elevationLoaded = true;   
+                    if(node.elevation.image ===null)
+                        return;
+
+                    node.elevationLoaded = true; 
+                    node.elevation.image.removeEventListener("load", node.loadElevation, false);
+                    node.elevation.image = null;
                 });
 
                 this.counter++;
