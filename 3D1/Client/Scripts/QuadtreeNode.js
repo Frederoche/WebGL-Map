@@ -1,4 +1,5 @@
-﻿function QuadtreeNode(translationVector, scaleFactor, colorVector, center, texturePath, depth, elevationDataTexturePath, nodeNr, node, bbox) {
+﻿///<reference path="webgl.d.ts" />
+function QuadtreeNode(translationVector, scaleFactor, colorVector, center, texturePath, depth, elevationDataTexturePath, nodeNr, node, bbox) {
     this.parent = node;
     this.elevation = null;
     this.texture = null;
@@ -70,21 +71,25 @@ QuadtreeNode.prototype =
 
     getTexture: function (ext, callback)
     {
+        if(this.textureLoaded)
+            callback();
+
         this.texture = device.createTexture();
         var image = new Image(256, 256);
 
         var success = function() {
             device.bindTexture(device.TEXTURE_2D, this.texture);
-            device.texImage2D(device.TEXTURE_2D, 0, device.RGB, device.RGB, device.UNSIGNED_SHORT_5_6_5, image);
+            
+            device.texImage2D(device.TEXTURE_2D, 0, device.RGBA, device.RGBA, device.UNSIGNED_BYTE, image);
+
             device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MAG_FILTER, device.LINEAR);
             device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MIN_FILTER, device.LINEAR_MIPMAP_LINEAR);
-            device.generateMipmap(device.TEXTURE_2D);
-
             device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_S, device.CLAMP_TO_EDGE);
             device.texParameteri(device.TEXTURE_2D, device.TEXTURE_WRAP_T, device.CLAMP_TO_EDGE);
             
-            //if (ext)
-                //  device.texParameterf(device.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 16);
+            device.texParameterf(device.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 8);
+            
+            device.generateMipmap(device.TEXTURE_2D);
 
             device.bindTexture(device.TEXTURE_2D, null);
             callback();
@@ -96,6 +101,9 @@ QuadtreeNode.prototype =
 
     getElevationFromWms: function (url, callback)
     {
+        if(this.elevationLoaded)
+            callback();
+            
         var image = new Image(128, 128);
 
         this.elevation = device.createTexture();

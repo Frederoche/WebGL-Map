@@ -109,7 +109,7 @@ ThreeDEngine.prototype =
             quadtreeDepth: 2,
             initialtexturePath: this.tileUrl,
             initialElevationPath: this.elevationUrl,
-            chunckSize: 128
+            chunckSize: 256
         };
 
         this.quadtree = new Quadtree(quadtreeOptions);
@@ -189,7 +189,7 @@ ThreeDEngine.prototype =
         //PSEUDO-INSTANCED
         this.quadtree.setProgram();
             this.quadtree.setMatrixUniforms(this.projMatrix, this.viewMatrix, this._spherify, this.camera);
-            this.quadtree.draw(this.wireFrame, this.frustum, this.quadtree.rootNode, this.ext, 6000, this.tileUrl, this.Wms, this.lastUpdateCall);
+            this.quadtree.draw(this.wireFrame, this.frustum, this.quadtree.rootNode, this.ext, 4000, this.tileUrl, this.Wms, this.lastUpdateCall);
             this.quadtree.disableProgram();
 
         this.lastUpdateCall = requestAnimationFrame(function () {
