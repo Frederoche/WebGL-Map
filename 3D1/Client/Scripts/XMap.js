@@ -222,7 +222,7 @@ XMap.DOM.Events =
 
                 if (resp !== '') {
                     jObj = JSON.parse(resp);
-                    this._generateAutocomplete(jObj);
+                    XMap.DOM.Events._generateAutocomplete(jObj);
                 }
             });
 

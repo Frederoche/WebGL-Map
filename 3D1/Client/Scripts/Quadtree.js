@@ -161,7 +161,7 @@ Quadtree.prototype =
                                               (frustum.position[1] - this.nodeCenter[1]) * (frustum.position[1] - this.nodeCenter[1]) +
                                               (frustum.position[2] - this.nodeCenter[2]) * (frustum.position[2] - this.nodeCenter[2]));
 
-        if (this.chunckDistFromCamera > delta && node.type === 1) {
+        if (this.chunckDistFromCamera - delta >=0.01  && node.type === 1) {
             
             if (tile !== node.initialtexturePath)
             {
@@ -218,8 +218,6 @@ Quadtree.prototype =
         {
             if (node.type !== 1)
             {
-                //Blurring
-                this.draw(wireframe, frustum, node.parent, ext, delta , tile, Wms);
 
                 this._Wms.prepareRequest(node);
 
