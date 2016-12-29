@@ -105,6 +105,19 @@ Quadtree.prototype =
         if(!frustum.isBoxInsideFrustum(node.bbox)){
             node.type = 2;
             node.child = [];
+
+            if(node.texture!==null && node.texture.image!==null)
+            {
+                node.texture.image.removeEventListener("load",node.loadtextureHandler, false);
+                node.texture.image = null;
+            }
+
+            if(node.elevation!==null && node.elevation.image!==null)
+            {
+                node.elevation.image.removeEventListener("load",node.loadElevation, false);
+                node.elevation.image = null;
+            }
+
             return;
         }
 
