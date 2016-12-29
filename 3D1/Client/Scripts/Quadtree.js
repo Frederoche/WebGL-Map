@@ -223,9 +223,13 @@ Quadtree.prototype =
 
                 node.getElevationFromWms(this._Wms.url, function ()
                 {
-                    this._addNode(node);
+                    if(node.elevation.image ===null)
+                        return;
 
-                }.bind(this));
+                    node.elevationLoaded = true; 
+                    node.elevation.image.removeEventListener("load", node.loadElevation, false);
+                    node.elevation.image = null;
+                });
 
                 this.counter++;
             }
