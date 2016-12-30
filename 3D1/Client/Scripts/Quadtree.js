@@ -20,7 +20,6 @@ XMap.Quadtree = function(option)
         texturePath: "",
         depth:option.quadtreeDepth,
         elevationDataTexturePath:"",
-        nodeNr:"-1",
         parent:undefined, 
         bbox:this.chunck.bbox,
         id:''
@@ -214,7 +213,7 @@ XMap.Quadtree.prototype =
         this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - node.center[0]) * (frustum.position[0] - node.center[0]) +
                                               (frustum.position[1] - node.center[1]) * (frustum.position[1] - node.center[1]) +
                                               (frustum.position[2] - node.center[2]) * (frustum.position[2] - node.center[2]));
-        console.log(delta);
+        
         if (this.chunckDistFromCamera - delta >= 0.01  && node.type === 1) {
             
             if (tile !== node.initialtexturePath)
@@ -265,7 +264,7 @@ XMap.Quadtree.prototype =
 
             //Blurring
             if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1)
-                this.draw(wireframe, frustum, node.parent, ext, delta , tile);
+                this.draw(wireframe, frustum, node.parent, ext, delta/2 , tile);
     
         }
         else
