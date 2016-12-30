@@ -1,11 +1,10 @@
-﻿function Geocoding(url)
+﻿XMap.Geocoding = function(url)
 {
-    //url = 'http://services.gisgraphy.com/fulltext/fulltextsearch?q='
     this.urlPrefix = url;
     this.searchUrl = '';
 };
 
-Geocoding.prototype =
+XMap.Geocoding.prototype =
 {
     constructSearchUrl : function(searchPhrase, placeType, country) 
     {

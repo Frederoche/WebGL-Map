@@ -1,4 +1,4 @@
-﻿function Buffer(vertexShaderId, fragmentShaderId, bboxVertexShaderId, bboxFragmentShaderId)
+﻿ XMap.Buffer = function(vertexShaderId, fragmentShaderId, bboxVertexShaderId, bboxFragmentShaderId)
 {
     this._vertexShaderId   = vertexShaderId;
     this._fragmentShaderId = fragmentShaderId;
@@ -20,12 +20,12 @@
     this.loaded = false;
 };
 
-Buffer.prototype._isTexture = true;
-Buffer.prototype.lastScaleFactor = null;
-Buffer.prototype._vertexShader = {};
-Buffer.prototype._fragmentShader = {};
+XMap.Buffer.prototype._isTexture = true;
+XMap.Buffer.prototype.lastScaleFactor = null;
+XMap.Buffer.prototype._vertexShader = {};
+XMap.Buffer.prototype._fragmentShader = {};
 
-Buffer.prototype =
+XMap.Buffer.prototype =
 {
     init: function (isTexture)
     {
@@ -229,7 +229,7 @@ Buffer.prototype =
         device.bindBuffer(device.ELEMENT_ARRAY_BUFFER, this._BboxIndexBuffer);
     },
 
-    setMatrixUniforms : function(projMatrix, viewMatrix, spherify, camera)
+    setMatrixUniforms : function(projMatrix, viewMatrix, camera)
     {
       device.uniformMatrix4fv(this._shaderProgram.pMatrixUniform, false, projMatrix);
       device.uniformMatrix4fv(this._shaderProgram.mvMatrixUniform, false, viewMatrix);
@@ -246,7 +246,7 @@ Buffer.prototype =
 
     prerenderBbox : function(node) {
         if (node.translationVector !== undefined)
-            device.uniform3fv(this._BBoxshaderProgram.translationVector, node.translationVector);
+            device.uniform3fv(this._BBoxshaderProgram.translationVector, node.center);
         if (node.scaleFactor !== undefined) {
             device.uniform1f(this._BBoxshaderProgram.scaleFactor, node.scaleFactor);
         }
@@ -259,7 +259,7 @@ Buffer.prototype =
                 return;
         }
         this.loaded = true;
-       device.uniform3fv(this._shaderProgram.translationVector, node.translationVector);
+       device.uniform3fv(this._shaderProgram.translationVector, node.center);
                
        device.uniform3fv(this._shaderProgram.gridColor, node.colorVector);
 

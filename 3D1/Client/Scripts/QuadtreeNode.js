@@ -1,30 +1,31 @@
-﻿function QuadtreeNode(translationVector, scaleFactor, colorVector, center, texturePath, depth, elevationDataTexturePath, nodeNr, node, bbox) {
-    this.parent = node;
+﻿ XMap.QuadtreeNode = function(option) {
+    this.parent = option.parent;
+    this.scaleFactor = option.scaling;
+    this.colorVector = option.color;
+    this.center = option.translation;
+    this.cbbox = option.bbox;
+    
     this.elevation = null;
     this.texture = null;
     this.textureLoaded = false;
     this.elevationLoaded = false;
-    this.id = nodeNr === '-1' ? '' : node.id + nodeNr;
-    this.parentId = node !== undefined ? node.id : '';
-    this.nodeNr = nodeNr;
-    this.scaleFactor = scaleFactor;
-    this.translationVector = translationVector;
-    this.colorVector = colorVector;
+
+    this.id = option.id;
+    
     this.child = [];
-    this.center = center;
-    this.cbbox = bbox;
-    this.bbox = this._constructBBox(true);
-    this.initialtexturePath = texturePath;
-    this.texturePath = this._getTexturePath(nodeNr, this.parentId, texturePath);
-    this.elevationDataTexturePath = this._getTexturePath(nodeNr, this.parentId, elevationDataTexturePath);
-    this.depth = depth;
+
+    this.bbox = this._constructBBox();
+    
+    this.texturePath = this._getTexturePath(option.id, option.texturePath);
+    this.elevationDataTexturePath = this._getTexturePath(option.id, option.elevationDataTexturePath);
+    this.depth = option.depth;
     this.type = 2;
 };
 
 
-QuadtreeNode.prototype =
+XMap.QuadtreeNode.prototype =
 {
-    _constructBBox: function (spherify)
+    _constructBBox: function ()
     {
         var p1 = vec3.create();
         var p2 = vec3.create();
@@ -45,23 +46,35 @@ QuadtreeNode.prototype =
         vec3.scale(this.cbbox.p7, this.scaleFactor, p7);
         vec3.scale(this.cbbox.p8, this.scaleFactor, p8);
 
-        vec3.add(p1, this.translationVector, p1);
-        vec3.add(p2, this.translationVector, p2);
-        vec3.add(p3, this.translationVector, p3);
-        vec3.add(p4, this.translationVector, p4);
-        vec3.add(p5, this.translationVector, p5);
-        vec3.add(p6, this.translationVector, p6);
-        vec3.add(p7, this.translationVector, p7);
-        vec3.add(p8, this.translationVector, p8);
+        vec3.add(p1, this.center, p1);
+        vec3.add(p2, this.center, p2);
+        vec3.add(p3, this.center, p3);
+        vec3.add(p4, this.center, p4);
+        vec3.add(p5, this.center, p5);
+        vec3.add(p6, this.center, p6);
+        vec3.add(p7, this.center, p7);
+        vec3.add(p8, this.center, p8);
 
-        var box = new bbox();
-        box.setPoints(p1, p2, p3, p4, p5, p6, p7, p8);
+        var box = new XMap.bbox();
+
+        var points = {
+            p1:p1,
+            p2:p2,
+            p3:p3,
+            p4:p4,
+            p5:p5,
+            p6:p6,
+            p7:p7,
+            p8:p8,
+        }
+
+        box.setPoints(points);
         return box;
     },
 
     updateTexturePath: function (newTexturePath)
     {
-        this.texturePath = this._getTexturePath(this.nodeNr, this.parentId, newTexturePath);
+        this.texturePath = this._getTexturePath(this.id, newTexturePath);
         this.textureLoaded = false;
         this.initialtexturePath = newTexturePath;
     },
@@ -129,40 +142,34 @@ QuadtreeNode.prototype =
         
     },
 
-   
-
-
-    _getTexturePath: function (childId, parentId, initialtexturePath) {
+    _getTexturePath: function (id, initialtexturePath) {
         if (initialtexturePath === "")
             return "";
         
         if (initialtexturePath.pre.indexOf("google") != -1)
         {
-            var tileCoords = this._quadKeyToTile(parentId + childId);
+            var tileCoords = this._quadKeyToTile(id);
             return initialtexturePath.pre + "&x="+ tileCoords.x +"&y=" +tileCoords.y +"&z="+ tileCoords.z;
         }
 
         if (!initialtexturePath.tile)
-            return initialtexturePath.pre + parentId + childId + initialtexturePath.su;
+            return initialtexturePath.pre + id+ initialtexturePath.su;
         
         else if (initialtexturePath.special != undefined)
         {
-            var tileCoords = this._quadKeyToTile(parentId + childId);
+            var tileCoords = this._quadKeyToTile(id);
             var ymax = Math.pow(2, tileCoords.z);
             var y = ymax - tileCoords.y - 1;
             return initialtexturePath.pre + tileCoords.z + "/" + tileCoords.x + "/" + y + initialtexturePath.su;
         }
         else
         {
-            var tileCoords = this._quadKeyToTile(parentId + childId);
+            var tileCoords = this._quadKeyToTile(id);
             return initialtexturePath.pre + tileCoords.z + "/" + tileCoords.x + "/" + tileCoords.y + initialtexturePath.su;
         }
     },
 
-    _makeTileString: function (childId, parentId)
-    {
-       return parentId + childId;
-    },
+    
 
     getZoomLevel: function () {
         

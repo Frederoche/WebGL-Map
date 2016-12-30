@@ -1,4 +1,4 @@
-﻿function Camera(position0, lookAt0, up0, initialtileSize)
+﻿XMap.Camera = function(position0, lookAt0, up0, initialtileSize)
 {
     this.position = vec3.create(position0);
     this.lookAt = vec3.create(lookAt0);
@@ -8,11 +8,11 @@
     this.pitch =   Math.PI;
 
     this.speed = 2.0;
-    this.Mercator = new Mercator(initialtileSize);
+    this.Mercator = new XMap.Mercator(initialtileSize);
 };
 
 
-Camera.prototype =
+XMap.Camera.prototype =
 {
     update: function () {
         var lookAtScale = vec3.create();

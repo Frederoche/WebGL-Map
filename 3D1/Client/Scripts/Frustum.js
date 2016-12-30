@@ -1,9 +1,4 @@
-﻿/// <reference path="BoundingBox.js" />
-/// <reference path="Buffer.js" />
-/// <reference path="Camera.js" />
-/// <reference path="Plane.js" />
-/// <reference path="gl-Matrix.js" />
-function Frustum(nearDist, farDist, fovy, aspect)
+﻿ XMap.Frustum = function(nearDist, farDist, fovy, aspect)
 {
     this.nearDist = nearDist;
     this.farDist = farDist;
@@ -43,22 +38,22 @@ function Frustum(nearDist, farDist, fovy, aspect)
 
     this.indices = [0, 1, 2, 1, 2, 3];
 
-    this.buffer = new Buffer('vfrustShader', 'ffrustShader');
+    this.buffer = new XMap.Buffer('vfrustShader', 'ffrustShader');
     this.buffer.init(false);
     this.buffer.create(this.vertices, this.indices, null);
 
-    this.nearPlane   = new Plane();
-    this.farPlane    = new Plane();
-    this.bottomPlane = new Plane();
-    this.topPlane    = new Plane();
-    this.leftPlane   = new Plane();
-    this.rightPlane  = new Plane();
+    this.nearPlane   = new XMap.Plane();
+    this.farPlane    = new XMap.Plane();
+    this.bottomPlane = new XMap.Plane();
+    this.topPlane    = new XMap.Plane();
+    this.leftPlane   = new XMap.Plane();
+    this.rightPlane  = new XMap.Plane();
 
     this.planes = [];
 };
 
 
-Frustum.prototype =
+XMap.Frustum.prototype =
 {
     extractPlanes: function(camera)
     {

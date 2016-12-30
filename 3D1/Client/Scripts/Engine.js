@@ -1,25 +1,19 @@
-﻿/// <reference path="Quadtree.js" />
-/// <reference path="gl-Matrix.js" />
-/// <reference path="Frustum.js" />
-/// <reference path="Chunck.js" />
-/// <reference path="Camera.js" />
-device = {};
+﻿device = {};
 
-function ThreeDEngine(canvas, tileUrl, elevationUrl, initialRootSize) {
+
+XMap.ThreeDEngine = function(options) {
     
-    this.canvas = canvas;
+    this.canvas = options.canvas;
     
-    this.initialRootSize = initialRootSize;
+    this.initialRootSize = options.initialRootSize;
 
     this.viewMatrix = mat4.create();
     this.projMatrix = mat4.create();
 
-    this.elevationUrl = elevationUrl;
+    this.elevationUrl = options.elevationUrl;
 
-    this.cubeTexture = {};
-
-    this.camera = new Camera(vec3.create([0, 400, 0]), vec3.create([0, 0, 0]), vec3.create([0, 1, 0]), this.initialRootSize);
-    this.birdCamera = new Camera(vec3.create([0, 700, 0]), vec3.create([0, 0, 0]), vec3.create([0, 1, 0]), this.initialRootSize);
+    this.camera = new XMap.Camera(vec3.create([0, 400, 0]), vec3.create([0, 0, 0]), vec3.create([0, 1, 0]), this.initialRootSize);
+    this.birdCamera = new XMap.Camera(vec3.create([0, 700, 0]), vec3.create([0, 0, 0]), vec3.create([0, 1, 0]), this.initialRootSize);
 
     this.quadtree = {};
     
@@ -27,39 +21,32 @@ function ThreeDEngine(canvas, tileUrl, elevationUrl, initialRootSize) {
     
     this.wireFrame = {};
     
-
     this.Wms = false;
     
     this._birdCamOn = false;
     this._spherify = false;
 
-    this.tileUrl = tileUrl;
+    this.tileUrl = options.tileUrl;
 
     this.animationframeId = 0;
     this.showBBox = false;
 
     this.translationXMatrix = {};
     
-    this.geocoding = new Geocoding('http://api.opencagedata.com/geocode/v1/json?pretty=1&key=2532638cbbd3c34fe376ccdfd6a9bc6c&query=');
-
     this.rotationMatrix = mat4.create();
     mat4.identity(this.rotationMatrix);
-
-    this.lastMouseX = 0;
-    this.lastMouseY = 0;
-    this.mousemove = false;
 
     this._lastdate = new Date();
     this.lastUpdateCall = null;
 };
 
 
-ThreeDEngine.prototype =
+XMap.ThreeDEngine.prototype =
 {
     _getUserPosition: function () {
         var self = this;
         navigator.geolocation.getCurrentPosition(function (pos) {
-            var mercator = new Mercator(self.initialRootSize);
+            var mercator = new XMap.Mercator(self.initialRootSize);
 
             var x = mercator.getX(pos.coords.longitude);
             var z = mercator.getZ(pos.coords.latitude);
@@ -101,7 +88,7 @@ ThreeDEngine.prototype =
             alert("32 bit indices not supported");
         }
 
-        this.frustum = new Frustum(0.001, 1500, 65, this.canvas.clientWidth / this.canvas.clientHeight);
+        this.frustum = new XMap.Frustum(0.001, 1500, 65, this.canvas.clientWidth / this.canvas.clientHeight);
 
         var quadtreeOptions =
         {
@@ -109,10 +96,10 @@ ThreeDEngine.prototype =
             quadtreeDepth: 2,
             initialtexturePath: this.tileUrl,
             initialElevationPath: this.elevationUrl,
-            chunckSize: 128
+            chunckSize: 256
         };
 
-        this.quadtree = new Quadtree(quadtreeOptions);
+        this.quadtree = new XMap.Quadtree(quadtreeOptions);
 
         window.device.clearColor(100/255, 149/255, 237/255, 1.0);
         window.device.clearDepth(1);
@@ -186,8 +173,8 @@ ThreeDEngine.prototype =
 
         //PSEUDO-INSTANCED
         this.quadtree.setProgram();
-            this.quadtree.setMatrixUniforms(this.projMatrix, this.viewMatrix, this._spherify, this.camera);
-            this.quadtree.draw(this.wireFrame, this.frustum, this.quadtree.rootNode, this.ext, 4500, this.tileUrl, this.Wms, this.lastUpdateCall);
+            this.quadtree.setMatrixUniforms(this.projMatrix, this.viewMatrix, this.camera);
+            this.quadtree.draw(this.wireFrame, this.frustum, this.quadtree.rootNode, this.ext, 3500, this.tileUrl);
             this.quadtree.disableProgram();
 
         this.lastUpdateCall = requestAnimationFrame(function () {

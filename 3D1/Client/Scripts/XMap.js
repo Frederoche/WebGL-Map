@@ -1,6 +1,4 @@
-﻿XMap = window.XMap || {};
-
-XMap.Proxy= {
+﻿XMap.Proxy= {
     proxyUrl: 'http://localhost:8000/image?server=' 
 }
 
@@ -49,10 +47,10 @@ XMap.Canvas = {
 
 
         var mouseDown = function(e) {
-            XMap.Engine._engine.mousemove = true;
+            XMap.DOM.Events.mousemove = true;
 
-            XMap.Engine._engine.lastMouseX = e.clientX;
-            XMap.Engine._engine.lastMouseY = e.clientY;
+            XMap.DOM.Events.lastMouseX = e.clientX;
+            XMap.DOM.Events.lastMouseY = e.clientY;
         };
 
         this._canvas.addEventListener('mousewheel', mouseWheel, false);
@@ -64,14 +62,28 @@ XMap.Canvas = {
     }
 };
 
+XMap.Search =
+{
+    geocoding : new XMap.Geocoding('http://api.opencagedata.com/geocode/v1/json?pretty=1&key=2532638cbbd3c34fe376ccdfd6a9bc6c&query=')
+}
+
 XMap.Engine =
 {
     _engine: {},
     
     create: function () {
+        
+
         var canvas = XMap.Canvas.create();
 
-        this._engine = new ThreeDEngine(canvas, XMap.Url.tileUrlBing, XMap.Url.elevationUrl, 512);
+        var engineOptions = {
+            'canvas':canvas,
+            'tileUrl':XMap.Url.tileUrlBing,
+            'elevationUrl':XMap.Url.elevationUrl,
+            initialRootSize : 512
+        };
+
+        this._engine = new XMap.ThreeDEngine(engineOptions);
         this._engine.init();
         this._engine.tileUrl = XMap.Url.tileUrlBing;
     },
@@ -87,6 +99,9 @@ XMap.DOM = {};
 XMap.DOM.Events =
 {
     _toggleOn: true,
+    lastMouseX : 0,
+    lastMouseY : 0,
+    mousemove : false,
 
     _displayPosition: function ()
     {
@@ -153,7 +168,7 @@ XMap.DOM.Events =
         document.getElementById("lookup").addEventListener("click", function () { XMap.Engine._engine.camera.lookUp(); }, false);
         
         document.addEventListener("mouseup", function(){
-            XMap.Engine._engine.mousemove = false;
+            XMap.DOM.Events.mousemove = false;
         });
 
         document.addEventListener("mousemove", function (e)
@@ -173,22 +188,22 @@ XMap.DOM.Events =
             mat4.multiplyVec4(invProjMatrix, point3D);
             mat4.multiplyVec4(invViewMatrix, point3D);
 
-            if (!XMap.Engine._engine.mousemove)
+            if (!XMap.DOM.Events.mousemove)
                 return;
 
             var newX = e.clientX;
             var newY = e.clientY;
 
-            var dX = newX - XMap.Engine._engine.lastMouseX;
-            var dY = newY - XMap.Engine._engine.lastMouseY;
+            var dX = newX - XMap.DOM.Events.lastMouseX;
+            var dY = newY - XMap.DOM.Events.lastMouseY;
 
             var translation = vec3.create([-dX * XMap.Engine._engine.camera.position[1] / 1000.0, 0, -dY * XMap.Engine._engine.camera.position[1] / 1000.0]);
 
             vec3.add(XMap.Engine._engine.camera.lookAt, translation, XMap.Engine._engine.camera.lookAt);
             vec3.add(XMap.Engine._engine.camera.position, translation, XMap.Engine._engine.camera.position);
 
-            XMap.Engine._engine.lastMouseX = newX;
-            XMap.Engine._engine.lastMouseY = newY;
+            XMap.DOM.Events.lastMouseX = newX;
+            XMap.DOM.Events.lastMouseY = newY;
 
             if (XMap.Engine._engine.lastUpdateCall)
                 cancelAnimationFrame(XMap.Engine._engine.lastUpdateCall);
@@ -207,7 +222,7 @@ XMap.DOM.Events =
             if (searchString === "")
                 return;
 
-            XMap.Engine._engine.geocoding.constructSearchUrl(searchString, '', '');
+           XMap.Search.geocoding.constructSearchUrl(searchString, '', '');
 
             var jObj = {};
  
@@ -218,7 +233,7 @@ XMap.DOM.Events =
                 autocomplete.removeChild(autocomplete.firstChild);
             }
 
-            XMap.Engine._engine.geocoding.sendRequest(function (resp) {
+            XMap.Search.geocoding.sendRequest(function (resp) {
 
                 if (resp !== '') {
                     jObj = JSON.parse(resp);
@@ -275,7 +290,7 @@ XMap.DOM.Events =
             listElement.addEventListener("click", function ()
             {
                 var li = document.getElementById(this.id);
-                var mercator = new Mercator(XMap.Engine._engine.initialRootSize);
+                var mercator = new XMap.Mercator(XMap.Engine._engine.initialRootSize);
 
                 var x = mercator.getX(li.lng);
                 var z = mercator.getZ(li.lat);

@@ -1,14 +1,11 @@
-﻿/// <reference path="gl-Matrix.js" />
-
-
-function Plane() {
+﻿ XMap.Plane = function() {
     this.a = 0;
     this.b = 0;
     this.c = 0;
     this.d = 0;
 };
 
-Plane.prototype =
+XMap.Plane.prototype =
 {
     getThreePoints: function (p1, p2, p3)
     {

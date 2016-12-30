@@ -1,6 +1,6 @@
 ﻿/// <reference path="Buffer.js" />
 
-function Chunck(size)
+ XMap.Chunck = function(size)
 {
     this.size = size;
 
@@ -19,7 +19,7 @@ function Chunck(size)
     this.buffer = {};
 };
 
-Chunck.prototype =
+XMap.Chunck.prototype =
 {
     create: function ()
     {
@@ -105,7 +105,7 @@ Chunck.prototype =
             }
         }
 
-        this.buffer = new Buffer("vShader", "fShader", 'vbboxShader', 'fbboxShader');
+        this.buffer = new XMap.Buffer("vShader", "fShader", 'vbboxShader', 'fbboxShader');
         this.buffer.init(true);
         this.buffer.create(vertices, indices);
 
@@ -156,9 +156,9 @@ Chunck.prototype =
         this.buffer.render(projMatrix, viewMatrix, texture, wireframe);
     },
 
-    setMatrixUniforms: function (projMatrix, viewMatrix, spherify, camera)
+    setMatrixUniforms: function (projMatrix, viewMatrix,  camera)
     {
-        this.buffer.setMatrixUniforms(projMatrix, viewMatrix, spherify, camera);
+        this.buffer.setMatrixUniforms(projMatrix, viewMatrix,  camera);
     },
 
     setBBoxMatrixUniforms : function(projMatrix, viewMatrix) {

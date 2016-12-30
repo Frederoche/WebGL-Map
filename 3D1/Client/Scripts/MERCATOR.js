@@ -1,12 +1,11 @@
-﻿function Mercator(initialRootSize)
+﻿XMap = window.XMap || {};
+
+ XMap.Mercator = function(initialRootSize)
 {
     this.initialRootSize = initialRootSize;
 };
 
-//59.9071,10.7529 norsk opera
-//48.858093,2.294694 Effeil tårn
-
-Mercator.prototype =
+XMap.Mercator.prototype =
 {
     getLng: function (position)
     {

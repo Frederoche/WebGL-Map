@@ -1,9 +1,9 @@
-﻿function Wms(initialTileSize) {
+﻿XMap.Wms = function(initialTileSize) {
     this.url = '';
-    this.mercator = new Mercator(initialTileSize);
+    this.mercator = new XMap.Mercator(initialTileSize);
 };
 
-Wms.prototype =
+XMap.Wms.prototype =
 {
     prepareRequest: function (node) {
         var max = vec3.create();

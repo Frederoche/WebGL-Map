@@ -1,27 +1,42 @@
 ﻿/// <reference path="Chunck.js" />
 /// <reference path="BoundingBox.js" />
 /// <reference path="gl-Matrix.js" />
-function Quadtree(option)
+XMap.Quadtree = function(option)
 {
     this.initialRootSize = option.initialRootSize;
     
-    this.chunck = new Chunck(option.chunckSize);
+    this.chunck = new XMap.Chunck(option.chunckSize);
     this.chunck.create();
     this.nodeCenter = vec3.create();
 
     this.initialtexturePath = option.initialtexturePath;
     this.initialElevationPath = option.initialElevationPath;
     
-    this.rootNode = new QuadtreeNode(vec3.create([0, 0, 0]), option.initialRootSize, vec3.create([255, 0, 0]), vec3.create([0, 0, 0]), "", option.quadtreeDepth, "", "-1",undefined, this.chunck.bbox);
+    var rootNodeOption = {
+        translation:vec3.create([0, 0, 0]),
+        scaling: option.initialRootSize,
+        color:vec3.create([255, 0, 0]),
+        center : vec3.create([0, 0, 0]),
+        texturePath: "",
+        depth:option.quadtreeDepth,
+        elevationDataTexturePath:"",
+        nodeNr:"-1",
+        parent:undefined, 
+        bbox:this.chunck.bbox,
+        id:''
+    };
+
+
+    this.rootNode = new XMap.QuadtreeNode(rootNodeOption);
 
     this._build(this.rootNode);
-    this._Wms = new Wms(option.initialRootSize);
+    this._Wms = new XMap.Wms(option.initialRootSize);
     this.counter = 0;
 
 };
 
 
-Quadtree.prototype =
+XMap.Quadtree.prototype =
 {
     _build: function (node)
     {
@@ -34,10 +49,6 @@ Quadtree.prototype =
                 this._build(node.child[i]);
             }
         }
-    },
-
-    _removeChilds : function(node) {
-        node.child = [];
     },
 
     _addNode: function (node)
@@ -55,24 +66,69 @@ Quadtree.prototype =
            
         var centerLowerRight = vec3.create();
         vec3.add(node.center, vec3.create([scaling, 0, -scaling]), centerLowerRight);
-           
-        var upperLeft  = new QuadtreeNode(centerUpperLeft, scaling, vec3.create([255, 0, 0]), centerUpperLeft, this.initialtexturePath, node.depth - 1, this.initialElevationPath, 2, node, this.chunck.bbox, node.elevation);
-        var upperRight = new QuadtreeNode(centerUpperRight, scaling, vec3.create([0, 255, 0]), centerUpperRight, this.initialtexturePath, node.depth - 1, this.initialElevationPath, 3, node, this.chunck.bbox, node.elevation);
-        var lowerLeft  = new QuadtreeNode(centerLowerLeft, scaling, vec3.create([0, 0, 255]), centerLowerLeft, this.initialtexturePath, node.depth - 1, this.initialElevationPath, 0, node, this.chunck.bbox, node.elevation);
-        var lowerRight = new QuadtreeNode(centerLowerRight, scaling, vec3.create([255, 0, 255]), centerLowerRight, this.initialtexturePath, node.depth - 1, this.initialElevationPath, 1, node, this.chunck.bbox, node.elevation);
 
-        node.child[0] = upperLeft;
-        node.child[1] = upperRight;
-        node.child[2] = lowerLeft;
-        node.child[3] = lowerRight;
-        
+        var upperLeftOptions = {
+            translation: centerUpperLeft,
+            scaling: scaling,
+            color: vec3.create([255, 0, 0]),
+            texturePath: this.initialtexturePath,
+            depth: node.depth - 1,
+            elevationDataTexturePath:this.initialElevationPath,
+            parent:node, 
+            bbox:this.chunck.bbox,
+            id:node.id + "2"
+            
+        };
+
+        var upperRightOptions = {
+            translation:centerUpperRight,
+            scaling:scaling,
+            color:vec3.create([0, 255, 0]),
+            texturePath: this.initialtexturePath,
+            depth:node.depth - 1,
+            elevationDataTexturePath:this.initialElevationPath,
+            parent:node, 
+            bbox:this.chunck.bbox,
+            id: node.id +"3"
+        };
+
+        var lowerLeftOptions = {
+            translation:centerLowerLeft,
+            scaling:scaling,
+            color:vec3.create([0, 0, 255]),
+            texturePath: this.initialtexturePath,
+            depth:node.depth - 1,
+            elevationDataTexturePath:this.initialElevationPath,
+            parent:node, 
+            bbox:this.chunck.bbox,
+            id:node.id + "0"
+        };
+
+        var lowerRightOptions = 
+        {
+            translation:centerLowerRight,
+            scaling:scaling,
+            color:vec3.create([255, 0, 255]),
+            texturePath: this.initialtexturePath,
+            depth:node.depth - 1,
+            elevationDataTexturePath:this.initialElevationPath,
+            parent:node, 
+            bbox:this.chunck.bbox,
+            id:node.id + "1"
+        };
+               
+        node.child[0]  = new XMap.QuadtreeNode(upperLeftOptions);
+        node.child[1]  = new XMap.QuadtreeNode(upperRightOptions);
+        node.child[2]  = new XMap.QuadtreeNode(lowerLeftOptions);
+        node.child[3]  = new XMap.QuadtreeNode(lowerRightOptions);
+
         node.type = 1;
         
     },
 
-    setMatrixUniforms : function(projMatrix, viewMatrix, spherify, camera)
+    setMatrixUniforms : function(projMatrix, viewMatrix, camera)
     {
-        this.chunck.setMatrixUniforms(projMatrix, viewMatrix, spherify, camera);
+        this.chunck.setMatrixUniforms(projMatrix, viewMatrix,  camera);
     },
 
     setBBoxMatrixUniforms: function (projMatrix, viewMatrix)
@@ -119,7 +175,7 @@ Quadtree.prototype =
     },
 
     //node.type == 2 ---->leaf
-    draw: function (wireframe, frustum, node, ext, delta, tile, Wms) {
+    draw: function (wireframe, frustum, node, ext, delta, tile) {
         
         if (node === undefined) 
         {
@@ -155,13 +211,11 @@ Quadtree.prototype =
             this._addNode(node);
         }
         
-
-        this.nodeCenter = node.center;
-        this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - this.nodeCenter[0]) * (frustum.position[0] - this.nodeCenter[0]) +
-                                              (frustum.position[1] - this.nodeCenter[1]) * (frustum.position[1] - this.nodeCenter[1]) +
-                                              (frustum.position[2] - this.nodeCenter[2]) * (frustum.position[2] - this.nodeCenter[2]));
-
-        if (this.chunckDistFromCamera - delta >=0.01  && node.type === 1) {
+        this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - node.center[0]) * (frustum.position[0] - node.center[0]) +
+                                              (frustum.position[1] - node.center[1]) * (frustum.position[1] - node.center[1]) +
+                                              (frustum.position[2] - node.center[2]) * (frustum.position[2] - node.center[2]));
+        console.log(delta);
+        if (this.chunckDistFromCamera - delta >= 0.01  && node.type === 1) {
             
             if (tile !== node.initialtexturePath)
             {
@@ -211,7 +265,7 @@ Quadtree.prototype =
 
             //Blurring
             if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1)
-                this.draw(wireframe, frustum, node.parent, ext, delta , tile, Wms);
+                this.draw(wireframe, frustum, node.parent, ext, delta , tile);
     
         }
         else
@@ -237,7 +291,7 @@ Quadtree.prototype =
             {
                 for (var i = 0; i < 4; i++) 
                 {    
-                    this.draw(wireframe, frustum, node.child[i], ext, delta/2.0, tile, Wms); 
+                    this.draw(wireframe, frustum, node.child[i], ext, delta/2.0, tile); 
                 }
             }
         }
