@@ -146,7 +146,7 @@ XMap.QuadtreeNode.prototype =
         if (initialtexturePath === "")
             return "";
         
-        if (initialtexturePath.pre.indexOf("google") != -1)
+        if (initialtexturePath.pre.indexOf("google") > -1)
         {
             var tileCoords = this._quadKeyToTile(id);
             return initialtexturePath.pre + "&x="+ tileCoords.x +"&y=" +tileCoords.y +"&z="+ tileCoords.z;
@@ -167,13 +167,6 @@ XMap.QuadtreeNode.prototype =
             var tileCoords = this._quadKeyToTile(id);
             return initialtexturePath.pre + tileCoords.z + "/" + tileCoords.x + "/" + tileCoords.y + initialtexturePath.su;
         }
-    },
-
-    
-
-    getZoomLevel: function () {
-        
-        return this.id.toString().length;
     },
 
     _quadKeyToTile: function (key) {
