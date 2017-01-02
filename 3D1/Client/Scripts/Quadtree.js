@@ -211,13 +211,13 @@ XMap.Quadtree.prototype =
         }
         
         //closest point not center!!!!!
-        this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - node.center[0]) * (frustum.position[0] - node.center[0]) +
+        /*this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - node.center[0]) * (frustum.position[0] - node.center[0]) +
                                               (frustum.position[1] - node.center[1]) * (frustum.position[1] - node.center[1]) +
-                                              (frustum.position[2] - node.center[2]) * (frustum.position[2] - node.center[2]));
+                                              (frustum.position[2] - node.center[2]) * (frustum.position[2] - node.center[2]));*/
 
-        /*this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - node.bbox.closestPoint(frustum.position)[0]) * (frustum.position[0] - node.bbox.closestPoint(frustum.position)[0]) +
+        this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - node.bbox.closestPoint(frustum.position)[0]) * (frustum.position[0] - node.bbox.closestPoint(frustum.position)[0]) +
                                               (frustum.position[1] - node.bbox.closestPoint(frustum.position)[1]) * (frustum.position[1] - node.bbox.closestPoint(frustum.position)[1]) +
-                                              (frustum.position[2] - node.bbox.closestPoint(frustum.position)[2]) * (frustum.position[2] - node.bbox.closestPoint(frustum.position)[2]));*/
+                                              (frustum.position[2] - node.bbox.closestPoint(frustum.position)[2]) * (frustum.position[2] - node.bbox.closestPoint(frustum.position)[2]));
         
         if (delta / this.chunckDistFromCamera <= 0.025  && node.type === 1) {
             
