@@ -13,7 +13,7 @@ XMap.ThreeDEngine = function(options) {
     this.elevationUrl = options.elevationUrl;
 
     this.camera = new XMap.Camera(vec3.create([0, 400, 0]), vec3.create([0, 0, 0]), vec3.create([0, 1, 0]), this.initialRootSize);
-    this.birdCamera = new XMap.Camera(vec3.create([0, 700, 0]), vec3.create([0, 0, 0]), vec3.create([0, 1, 0]), this.initialRootSize);
+    this.birdCamera = new XMap.Camera(vec3.create([0, 400, 0]), vec3.create([0, 0, 0]), vec3.create([0, 1, 0]), this.initialRootSize);
 
     this.quadtree = {};
     
@@ -88,7 +88,7 @@ XMap.ThreeDEngine.prototype =
             alert("32 bit indices not supported");
         }
 
-        this.frustum = new XMap.Frustum(0.001, 1500, 65, this.canvas.clientWidth / this.canvas.clientHeight);
+        this.frustum = new XMap.Frustum(0.001, 2000, 65, this.canvas.clientWidth / this.canvas.clientHeight);
 
         var quadtreeOptions =
         {
@@ -137,12 +137,13 @@ XMap.ThreeDEngine.prototype =
         
         if (this._birdCamOn)
         {
+            this.birdCamera.position[1] = this.camera.position[1] + 600;
             mat4.perspective(70, device.viewportWidth / device.viewportHeight, 0.1, 10000.0, this.projMatrix);
             mat4.lookAt(this.birdCamera.position, this.camera.position, this.birdCamera.up, this.viewMatrix);
         }
         else
         {
-            mat4.perspective(45, device.viewportWidth / device.viewportHeight, 0.01, 2000, this.projMatrix);
+            mat4.perspective(45, device.viewportWidth / device.viewportHeight, 0.01, 1500, this.projMatrix);
             mat4.lookAt(this.camera.position, this.camera.lookAt, this.camera.up, this.viewMatrix);
         }
     },
@@ -174,8 +175,8 @@ XMap.ThreeDEngine.prototype =
         //PSEUDO-INSTANCED
         this.quadtree.setProgram();
             this.quadtree.setMatrixUniforms(this.projMatrix, this.viewMatrix, this.camera);
-            this.quadtree.draw(this.wireFrame, this.frustum, this.quadtree.rootNode, this.ext, 3500, this.tileUrl);
-            this.quadtree.disableProgram();
+            this.quadtree.draw(this.wireFrame, this.frustum, this.quadtree.rootNode, this.ext, 64, this.tileUrl);
+        this.quadtree.disableProgram();
 
         this.lastUpdateCall = requestAnimationFrame(function () {
             this.renderScene();

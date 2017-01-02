@@ -112,7 +112,6 @@ XMap.Buffer.prototype =
             this._shaderProgram.translationVector = device.getUniformLocation(this._shaderProgram, "translationVector");
             this._shaderProgram.gridColor = device.getUniformLocation(this._shaderProgram, "gridColor");
             this._shaderProgram.scaleFactor = device.getUniformLocation(this._shaderProgram, "scaleFactor");
-            this._shaderProgram.spherify = device.getUniformLocation(this._shaderProgram, "spherify");
             this._shaderProgram.cameraPosition = device.getUniformLocation(this._shaderProgram, "cameraPosition");
 
             this._shaderProgram.samplerUniform = device.getUniformLocation(this._shaderProgram, "sampler");
@@ -219,7 +218,6 @@ XMap.Buffer.prototype =
 
     disableProgram: function ()
     {
-        
         device.useProgram(null);
     },
 

@@ -13,7 +13,8 @@ XMap.Url =
     mapQuest: { pre: XMap.Proxy.proxyUrl + "http://otile4.mqcdn.com/tiles/1.0.0/sat/", su: ".png", tile: true },
     google: { pre: XMap.Proxy.proxyUrl + "http://mt1.google.com/vt/lyrs=y", su: "", tile: true },
     elevationUrl: { pre: XMap.Proxy.proxyUrl + "http://webutvikling.gisline.no/Elevation/", su: ".png", tile: true, special: true },
-    weather: { pre: XMap.Proxy.proxyUrl + "http://2.tile.openweathermap.org/map/precipitation/", su: ".png", tile: true }
+    weather: { pre: XMap.Proxy.proxyUrl + "http://2.tile.openweathermap.org/map/precipitation/", su: ".png", tile: true },
+    geocoding : 'http://api.opencagedata.com/geocode/v1/json?pretty=1&key=2532638cbbd3c34fe376ccdfd6a9bc6c&query='
 };
 
 XMap.Canvas = {
@@ -64,7 +65,7 @@ XMap.Canvas = {
 
 XMap.Search =
 {
-    geocoding : new XMap.Geocoding('http://api.opencagedata.com/geocode/v1/json?pretty=1&key=2532638cbbd3c34fe376ccdfd6a9bc6c&query=')
+    geocoding : new XMap.Geocoding(XMap.Url.geocoding)
 }
 
 XMap.Engine =
@@ -85,7 +86,7 @@ XMap.Engine =
 
         this._engine = new XMap.ThreeDEngine(engineOptions);
         this._engine.init();
-        this._engine.tileUrl = XMap.Url.tileUrlBing;
+        this._engine.tileUrl = XMap.Url.tileUrlStatensKartverk;
     },
 
     render : function() {

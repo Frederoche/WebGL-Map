@@ -31,7 +31,7 @@
         uniform mat4 viewMatrix;
         uniform vec3 translationVector;
         uniform float scaleFactor;
-        uniform float spherify;
+        
 
         precision highp sampler2D;
         uniform sampler2D elevationSampler;
@@ -166,7 +166,7 @@
 
             //vec3 result = applyFog(finalColor.xyz, viewSpace);
 
-            gl_FragColor = vec4(finalColor.xyz, 1.0);
+            gl_FragColor = vec4(finalColor.xyz , 1.0); //vec4(gridColor,0.5); 
 
         }
 

@@ -203,29 +203,15 @@ XMap.Frustum.prototype =
 
     isBoxInsideFrustum: function(bbox) //True = INSIDE, False = OUTSIDE
     {
-        var outside;
-        var inside;
+        var result = true;
 
-        for (var l = 0; l < 6; l++)
+        for(var i = 0; i < 6; i++)
         {
-            outside = 0;
-            inside = 0;
-
-            for (var k = 0; k < 8 && (inside === 0 || outside === 0) ; k++)
-            {
-                if (this.planes[l].distanceToPoint(bbox.getPoints()[k]) < 0) {
-                    outside++;
-                }
-                else
-                {
-                    inside++;
-                }
-            }
-
-            if (!inside) {
+             if(this.planes[i].distanceToPoint(bbox.getPVertex(this.planes[i].normal)) < 0)
                 return false;
-            }
+             if(this.planes[i].distanceToPoint(bbox.getNVertex(this.planes[i].normal)) < 0)
+                result =  true;
         }
-        return true;
+        return result;
     }
 };

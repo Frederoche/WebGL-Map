@@ -3,6 +3,7 @@
     this.b = 0;
     this.c = 0;
     this.d = 0;
+
 };
 
 XMap.Plane.prototype =
@@ -24,10 +25,15 @@ XMap.Plane.prototype =
         this.c = result[2];
 
         this.d = -(this.a * p3[0] + this.b * p3[1] + this.c * p3[2]);
+
+        this.normal = vec3.create([this.a, this.b, this.c]);
+
+        //vec3.normalize(this.normal,this.normal);
     },
 
     distanceToPoint: function (p)
     {
+        
         return (this.a * p[0]  + this.b * p[1] + this.c * p[2] + this.d) / Math.sqrt(this.a * this.a + this.b * this.b + this.c * this.c);
-    }
+    },
 };

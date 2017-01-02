@@ -210,11 +210,16 @@ XMap.Quadtree.prototype =
             this._addNode(node);
         }
         
+        //closest point not center!!!!!
         this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - node.center[0]) * (frustum.position[0] - node.center[0]) +
                                               (frustum.position[1] - node.center[1]) * (frustum.position[1] - node.center[1]) +
                                               (frustum.position[2] - node.center[2]) * (frustum.position[2] - node.center[2]));
+
+        /*this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - node.bbox.closestPoint(frustum.position)[0]) * (frustum.position[0] - node.bbox.closestPoint(frustum.position)[0]) +
+                                              (frustum.position[1] - node.bbox.closestPoint(frustum.position)[1]) * (frustum.position[1] - node.bbox.closestPoint(frustum.position)[1]) +
+                                              (frustum.position[2] - node.bbox.closestPoint(frustum.position)[2]) * (frustum.position[2] - node.bbox.closestPoint(frustum.position)[2]));*/
         
-        if (this.chunckDistFromCamera - delta >= 0.01  && node.type === 1) {
+        if (delta / this.chunckDistFromCamera <= 0.025  && node.type === 1) {
             
             if (tile !== node.initialtexturePath)
             {
