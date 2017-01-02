@@ -28,7 +28,7 @@ XMap.Quadtree = function(option)
 
     this.rootNode = new XMap.QuadtreeNode(rootNodeOption);
 
-    this._build(this.rootNode);
+    
     this._Wms = new XMap.Wms(option.initialRootSize);
     this.counter = 0;
 
@@ -37,18 +37,6 @@ XMap.Quadtree = function(option)
 
 XMap.Quadtree.prototype =
 {
-    _build: function (node)
-    {
-        if (node.depth > 1)
-        {
-            this._addNode(node);
-
-            for (var i = 0; i < 4; i++)
-            {
-                this._build(node.child[i]);
-            }
-        }
-    },
 
     _addNode: function (node)
     {
@@ -168,6 +156,7 @@ XMap.Quadtree.prototype =
             if(parent.child[i].child.length > 0)
             {
                 this.removechild(parent.child[i])
+                parent.child[i].parent = null;
                 parent.child[i] = null; 
             }
         }
@@ -210,16 +199,13 @@ XMap.Quadtree.prototype =
             this._addNode(node);
         }
         
-        //closest point not center!!!!!
-        /*this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - node.center[0]) * (frustum.position[0] - node.center[0]) +
-                                              (frustum.position[1] - node.center[1]) * (frustum.position[1] - node.center[1]) +
-                                              (frustum.position[2] - node.center[2]) * (frustum.position[2] - node.center[2]));*/
+        
 
         this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - node.bbox.closestPoint(frustum.position)[0]) * (frustum.position[0] - node.bbox.closestPoint(frustum.position)[0]) +
                                               (frustum.position[1] - node.bbox.closestPoint(frustum.position)[1]) * (frustum.position[1] - node.bbox.closestPoint(frustum.position)[1]) +
                                               (frustum.position[2] - node.bbox.closestPoint(frustum.position)[2]) * (frustum.position[2] - node.bbox.closestPoint(frustum.position)[2]));
         
-        if (delta / this.chunckDistFromCamera <= 0.021  && node.type === 1) {
+        if (delta / this.chunckDistFromCamera <= 0.025  && node.type === 1) {
             
             if (tile !== node.initialtexturePath)
             {

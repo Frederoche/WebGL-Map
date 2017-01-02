@@ -3,7 +3,6 @@
     this.scaleFactor = option.scaling;
     this.colorVector = option.color;
     this.center = option.translation;
-    this.cbbox = option.bbox;
     
     this.elevation = null;
     this.texture = null;
@@ -14,18 +13,18 @@
     
     this.child = [];
 
-    this.bbox = this._constructBBox();
+    this.bbox = this._constructBBox(option.bbox);
     
     this.texturePath = this._getTexturePath(option.id, option.texturePath);
     this.elevationDataTexturePath = this._getTexturePath(option.id, option.elevationDataTexturePath);
-    this.depth = option.depth;
+    
     this.type = 2;
 };
 
 
 XMap.QuadtreeNode.prototype =
 {
-    _constructBBox: function ()
+    _constructBBox: function (bboxOption)
     {
         var p1 = vec3.create();
         var p2 = vec3.create();
@@ -37,14 +36,14 @@ XMap.QuadtreeNode.prototype =
         var p8 = vec3.create();
 
         //BBOX scaling;
-        vec3.scale(this.cbbox.p1, this.scaleFactor, p1);
-        vec3.scale(this.cbbox.p2, this.scaleFactor, p2);
-        vec3.scale(this.cbbox.p3, this.scaleFactor, p3);
-        vec3.scale(this.cbbox.p4, this.scaleFactor, p4);
-        vec3.scale(this.cbbox.p5, this.scaleFactor, p5);
-        vec3.scale(this.cbbox.p6, this.scaleFactor, p6);
-        vec3.scale(this.cbbox.p7, this.scaleFactor, p7);
-        vec3.scale(this.cbbox.p8, this.scaleFactor, p8);
+        vec3.scale(bboxOption.p1, this.scaleFactor, p1);
+        vec3.scale(bboxOption.p2, this.scaleFactor, p2);
+        vec3.scale(bboxOption.p3, this.scaleFactor, p3);
+        vec3.scale(bboxOption.p4, this.scaleFactor, p4);
+        vec3.scale(bboxOption.p5, this.scaleFactor, p5);
+        vec3.scale(bboxOption.p6, this.scaleFactor, p6);
+        vec3.scale(bboxOption.p7, this.scaleFactor, p7);
+        vec3.scale(bboxOption.p8, this.scaleFactor, p8);
 
         vec3.add(p1, this.center, p1);
         vec3.add(p2, this.center, p2);

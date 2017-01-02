@@ -88,7 +88,7 @@ XMap.ThreeDEngine.prototype =
             alert("32 bit indices not supported");
         }
 
-        this.frustum = new XMap.Frustum(0.001, 500, 65, this.canvas.clientWidth / this.canvas.clientHeight);
+        this.frustum = new XMap.Frustum(0.001, 800, 65, this.canvas.clientWidth / this.canvas.clientHeight);
 
         var quadtreeOptions =
         {
@@ -143,7 +143,7 @@ XMap.ThreeDEngine.prototype =
         }
         else
         {
-            mat4.perspective(45, device.viewportWidth / device.viewportHeight, 0.01, 500, this.projMatrix);
+            mat4.perspective(45, device.viewportWidth / device.viewportHeight, 0.01, 800, this.projMatrix);
             mat4.lookAt(this.camera.position, this.camera.lookAt, this.camera.up, this.viewMatrix);
         }
     },
@@ -167,7 +167,7 @@ XMap.ThreeDEngine.prototype =
 
         this.frustum.extractPlanes(this.camera);
 
-        device.disable(device.CULL_FACE);
+        
 
         if (this.lastUpdateCall)
             cancelAnimationFrame(this.lastUpdateCall);
