@@ -88,7 +88,7 @@ XMap.ThreeDEngine.prototype =
             alert("32 bit indices not supported");
         }
 
-        this.frustum = new XMap.Frustum(0.001, 800, 65, this.canvas.clientWidth / this.canvas.clientHeight);
+        this.frustum = new XMap.Frustum(0.001, 800, 65, device.viewportWidth / device.viewportHeight);
 
         var quadtreeOptions =
         {

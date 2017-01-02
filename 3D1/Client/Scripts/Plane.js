@@ -24,7 +24,7 @@ XMap.Plane.prototype =
         this.b = result[1];
         this.c = result[2];
 
-        this.d = -(this.a * p3[0] + this.b * p3[1] + this.c * p3[2]);
+        this.d = -(this.a * p2[0] + this.b * p2[1] + this.c * p2[2]);
 
         this.normal = vec3.create([this.a, this.b, this.c]);
 
