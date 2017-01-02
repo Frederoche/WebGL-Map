@@ -219,7 +219,7 @@ XMap.Quadtree.prototype =
                                               (frustum.position[1] - node.bbox.closestPoint(frustum.position)[1]) * (frustum.position[1] - node.bbox.closestPoint(frustum.position)[1]) +
                                               (frustum.position[2] - node.bbox.closestPoint(frustum.position)[2]) * (frustum.position[2] - node.bbox.closestPoint(frustum.position)[2]));
         
-        if (delta / this.chunckDistFromCamera <= 0.025  && node.type === 1) {
+        if (delta / this.chunckDistFromCamera <= 0.021  && node.type === 1) {
             
             if (tile !== node.initialtexturePath)
             {
