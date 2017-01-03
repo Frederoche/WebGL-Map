@@ -143,12 +143,14 @@ XMap.Quadtree.prototype =
         {
             if(parent.child[i].texture!==null && parent.child[i].texture.image!==null)
             {
+                device.deleteTexture(parent.child[i].texture);
                 parent.child[i].texture.image.removeEventListener("load",parent.child[i].loadtextureHandler, false);
                 parent.child[i].texture.image = null;
             }
 
             if(parent.child[i].elevation!==null && parent.child[i].elevation.image!==null)
             {
+                device.deleteTexture(parent.child[i].elevation);
                 parent.child[i].elevation.image.removeEventListener("load",parent.child[i].loadElevation, false);
                 parent.child[i].elevation.image = null;
             }
@@ -171,9 +173,9 @@ XMap.Quadtree.prototype =
         }
 
         if(!frustum.isBoxInsideFrustum(node.bbox)){
-            node.type = 2;
+           
 
-            if(node.child.length >0)
+            if(node.child.length > 0)
             {
                 this.removechild(node);
             }
@@ -182,23 +184,24 @@ XMap.Quadtree.prototype =
 
             if(node.texture!==null && node.texture.image!==null)
             {
+                
                 node.texture.image.removeEventListener("load",node.loadtextureHandler, false);
                 node.texture.image = null;
             }
 
             if(node.elevation!==null && node.elevation.image!==null)
             {
+                
                 node.elevation.image.removeEventListener("load",node.loadElevation, false);
                 node.elevation.image = null;
             }
-
+            node.type = 2;
             return;
         }
 
         if(frustum.isBoxInsideFrustum(node.bbox) && node.child.length < 4){
             this._addNode(node);
         }
-        
         
 
         this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - node.bbox.closestPoint(frustum.position)[0]) * (frustum.position[0] - node.bbox.closestPoint(frustum.position)[0]) +
