@@ -174,7 +174,6 @@ XMap.Quadtree.prototype =
 
         if(!frustum.isBoxInsideFrustum(node.bbox)){
            
-
             if(node.child.length > 0)
             {
                 this.removechild(node);
@@ -203,12 +202,12 @@ XMap.Quadtree.prototype =
             this._addNode(node);
         }
         
-
-        this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - node.bbox.closestPoint(frustum.position)[0]) * (frustum.position[0] - node.bbox.closestPoint(frustum.position)[0]) +
-                                              (frustum.position[1] - node.bbox.closestPoint(frustum.position)[1]) * (frustum.position[1] - node.bbox.closestPoint(frustum.position)[1]) +
-                                              (frustum.position[2] - node.bbox.closestPoint(frustum.position)[2]) * (frustum.position[2] - node.bbox.closestPoint(frustum.position)[2]));
+        //should be the closest point not the center.
+        this.chunckDistFromCamera = Math.sqrt((frustum.position[0] - node.center[0]) * (frustum.position[0] - node.center[0]) +
+                                              (frustum.position[1] - node.center[1]) * (frustum.position[1] - node.center[1]) +
+                                              (frustum.position[2] - node.center[2]) * (frustum.position[2] - node.center[2]));
         
-        if (delta / this.chunckDistFromCamera <= 0.025  && node.type === 1) {
+        if (delta / this.chunckDistFromCamera <= 0.015  && node.type === 1) {
             
             if (tile !== node.initialtexturePath)
             {

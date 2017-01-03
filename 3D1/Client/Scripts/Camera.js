@@ -60,12 +60,12 @@ XMap.Camera.prototype =
     },
 
     lookUp: function () {
-        this.pitch += 0.03;
+        this.pitch += 0.05;
         vec3.add(this.position, [Math.cos(this.angle) * Math.sin(this.pitch), Math.cos(this.pitch), Math.sin(this.angle) * Math.sin(this.pitch)], this.lookAt);
     },
 
     lookDown: function () {
-        this.pitch -= 0.03;
+        this.pitch -= 0.05;
         vec3.add(this.position, [Math.cos(this.angle) * Math.sin(this.pitch), Math.cos(this.pitch), Math.sin(this.angle) * Math.sin(this.pitch)], this.lookAt);
     },
 

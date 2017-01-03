@@ -96,7 +96,7 @@ XMap.ThreeDEngine.prototype =
             quadtreeDepth: 2,
             initialtexturePath: this.tileUrl,
             initialElevationPath: this.elevationUrl,
-            chunckSize: 256
+            chunckSize: 128
         };
 
         this.quadtree = new XMap.Quadtree(quadtreeOptions);

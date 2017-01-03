@@ -43,21 +43,10 @@ XMap.bbox.prototype =
         var maxY = Math.max.apply(null,[this.p1[1], this.p2[1], this.p3[1], this.p4[1], this.p5[1], this.p5[1], this.p6[1], this.p7[1], this.p8[1]]);
         var maxZ = Math.max.apply(null,[this.p1[2], this.p2[2], this.p3[2], this.p4[2], this.p5[2], this.p5[2], this.p6[2], this.p7[2], this.p8[2]]);
         
-        return vec3.create([maxX, maxY, maxZ]);
+        return vec3.create([maxX,maxY, maxZ]);
     },
 
-    closestPoint : function(point)
-    {
-        mind = this._distance(point, this.min);
-        maxd = this._distance(point, this.max);
-
-        if(mind < maxd)
-        {
-            return this.min;
-        }
-
-        return this.max;
-    },
+    
 
     getPVertex : function(normal)
     {
@@ -110,7 +99,7 @@ XMap.bbox.prototype =
 
     _distance : function(p1 ,p2)
     {
-        return Math.sqrt( (p1[0] - p2[0])*(p1[0] - p2[0]) + (p1[1] - p2[1])*(p1[1] - p2[1]) + (p1[2] - p2[2])*(p1[2] - p2[2]));
+        return Math.abs( (p1[0] - p2[0]) + (p1[1] - p2[1])  + (p1[2] - p2[2]));
     },
 
     updateByRotation: function (rotationMatrix) {
