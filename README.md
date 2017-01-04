@@ -13,8 +13,8 @@ browse to: http://localhost:8000
 <img src="https://github.com/Frederoche/WebGL-Map/blob/master/World.PNG" width=300>
 
 - It works on Edge, Chrome, Opera, Firefox.
-- Spherify function doesnt work for the moment.
 - it works now with nodejs.
+
 
 Further work:
 

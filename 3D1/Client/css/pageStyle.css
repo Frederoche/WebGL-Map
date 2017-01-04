@@ -28,12 +28,12 @@
 #coordinate {
     padding-left: 5px;
     width: 360px;
-    height: 39px;
+    height: 36px;
     z-index: 2;
     position: absolute;
     top: 5px;
     left: 60px;
-    border: none;
+    border: 1px solid white;
     font-size: 20px;
     outline: none;
 }
@@ -101,7 +101,6 @@
     background-size: 40px;
     cursor: pointer;
     z-index: 10;
-    box-shadow:1px 1px 2px 0px rgba(0,0,0,0.2);
 }
 
 
