@@ -1,7 +1,4 @@
-﻿/// <reference path="Chunck.js" />
-/// <reference path="BoundingBox.js" />
-/// <reference path="gl-Matrix.js" />
-XMap.Quadtree = function(option)
+﻿XMap.Quadtree = function(option)
 {
     this.initialRootSize = option.initialRootSize;
     
@@ -18,7 +15,6 @@ XMap.Quadtree = function(option)
         color:vec3.create([255, 0, 0]),
         center : vec3.create([0, 0, 0]),
         texturePath: "",
-        depth:option.quadtreeDepth,
         elevationDataTexturePath:"",
         parent:undefined, 
         bbox:this.chunck.bbox,
@@ -28,7 +24,6 @@ XMap.Quadtree = function(option)
 
     this.rootNode = new XMap.QuadtreeNode(rootNodeOption);
 
-    
     this._Wms = new XMap.Wms(option.initialRootSize);
     this.counter = 0;
 

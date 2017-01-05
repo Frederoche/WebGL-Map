@@ -118,15 +118,15 @@ XMap.Chunck.prototype =
             8, 11, 10, 9 // BACK
         ];  
 
-        this.bbox.p1 = vec3.create([vertices[0], -1.0, vertices[2]]);
-        this.bbox.p2 = vec3.create([vertices[vertices.length - 3], -1.0, vertices[2]]);
-        this.bbox.p3 = vec3.create([vertices[0], -1.0, vertices[vertices.length - 1]]);
-        this.bbox.p4 = vec3.create([vertices[vertices.length - 3], -1.0, vertices[vertices.length - 1]]);
+        this.bbox.p1 = vec3.create([-1.0, -1.0, -1.0]);
+        this.bbox.p2 = vec3.create([-1.0, -1.0,  1.0]);
+        this.bbox.p3 = vec3.create([1.0,  -1.0, -1.0]);
+        this.bbox.p4 = vec3.create([1.0,  -1.0,  1.0]);
 
-        this.bbox.p5 = vec3.create([vertices[0], 1.0, vertices[2]]);
-        this.bbox.p6 = vec3.create([vertices[vertices.length - 3], 1.0, vertices[2]]);
-        this.bbox.p7 = vec3.create([vertices[0], 1.0, vertices[vertices.length - 1]]);
-        this.bbox.p8 = vec3.create([vertices[vertices.length - 3], 1.0, vertices[vertices.length - 1]]);
+        this.bbox.p5 = vec3.create([-1.0, 1.0, -1.0]);
+        this.bbox.p6 = vec3.create([-1.0, 1.0,  1.0]);
+        this.bbox.p7 = vec3.create([1.0,  1.0, -1.0]);
+        this.bbox.p8 = vec3.create([1.0,  1.0,  1.0]);
 
         var bboxVertices = [
             //Bottom

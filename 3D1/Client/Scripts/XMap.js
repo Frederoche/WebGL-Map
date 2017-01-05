@@ -81,7 +81,7 @@ XMap.Engine =
             'canvas':canvas,
             'tileUrl':XMap.Url.tileUrlBing,
             'elevationUrl':XMap.Url.elevationUrl,
-            initialRootSize : 512
+             initialRootSize : 512
         };
 
         this._engine = new XMap.ThreeDEngine(engineOptions);

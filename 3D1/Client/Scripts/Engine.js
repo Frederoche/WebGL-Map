@@ -88,12 +88,11 @@ XMap.ThreeDEngine.prototype =
             alert("32 bit indices not supported");
         }
 
-        this.frustum = new XMap.Frustum(0.0001, 800, 65, device.viewportWidth / device.viewportHeight);
+        this.frustum = new XMap.Frustum(0.001, 800, 65, device.viewportWidth / device.viewportHeight);
 
         var quadtreeOptions =
         {
             initialRootSize: this.initialRootSize,
-            quadtreeDepth: 2,
             initialtexturePath: this.tileUrl,
             initialElevationPath: this.elevationUrl,
             chunckSize: 128
@@ -105,7 +104,7 @@ XMap.ThreeDEngine.prototype =
         window.device.clearDepth(1);
         window.device.enable(window.device.DEPTH_TEST);
         window.device.depthMask(true);
-        window.device.disable(window.device.BLEND);
+        //window.device.disable(window.device.BLEND);
         window.device.enable(window.device.CULL_FACE);
         window.device.cullFace(window.device.FRONT);
 
@@ -137,13 +136,13 @@ XMap.ThreeDEngine.prototype =
         
         if (this._birdCamOn)
         {
-            this.birdCamera.position[1] = this.camera.position[1] + 600;
+            this.birdCamera.position[1] = this.camera.position[1] + 200;
             mat4.perspective(70, device.viewportWidth / device.viewportHeight, 0.1, 10000.0, this.projMatrix);
             mat4.lookAt(this.birdCamera.position, this.camera.position, this.birdCamera.up, this.viewMatrix);
         }
         else
         {
-            mat4.perspective(45, device.viewportWidth / device.viewportHeight, 0.001, 800, this.projMatrix);
+            mat4.perspective(45, device.viewportWidth / device.viewportHeight, 0.01, 800, this.projMatrix);
             mat4.lookAt(this.camera.position, this.camera.lookAt, this.camera.up, this.viewMatrix);
         }
     },
@@ -166,8 +165,6 @@ XMap.ThreeDEngine.prototype =
         XMap.DOM.Events._displayPosition();
 
         this.frustum.extractPlanes(this.camera);
-
-        
 
         if (this.lastUpdateCall)
             cancelAnimationFrame(this.lastUpdateCall);

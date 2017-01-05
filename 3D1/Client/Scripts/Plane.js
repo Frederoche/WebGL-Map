@@ -10,30 +10,31 @@ XMap.Plane.prototype =
 {
     getThreePoints: function (p1, p2, p3)
     {
-        var vec1   = vec3.create();
-        var vec2   = vec3.create();
-        var result = vec3.create();
+        var vector1   = vec3.create();
+        var vector2   = vec3.create();
+        var result    = vec3.create();
 
-        vec3.subtract(p2, p1, vec1);
-        vec3.subtract(p3, p1, vec2);
+        vec3.subtract(p2, p1, vector1);
+        vec3.subtract(p3, p1, vector2);
 
-        vec3.cross(vec1, vec2, result);
+        vec3.cross(vector1, vector2, result);
         
         
         this.a = result[0];
         this.b = result[1];
         this.c = result[2];
 
-        this.d = -(this.a * p2[0] + this.b * p2[1] + this.c * p2[2]);
+        this.d = -(this.a * p1[0] + this.b * p1[1] + this.c * p1[2]);
 
         this.normal = vec3.create([this.a, this.b, this.c]);
 
-        //vec3.normalize(this.normal,this.normal);
+        this.normal = vec3.normalize(this.normal);
     },
 
     distanceToPoint: function (p)
     {
-        
-        return (this.a * p[0]  + this.b * p[1] + this.c * p[2] + this.d) / Math.sqrt(this.a * this.a + this.b * this.b + this.c * this.c);
+        return (this.a * p[0]  + this.b * p[1] + this.c * p[2] + this.d);
     },
+
+    
 };
