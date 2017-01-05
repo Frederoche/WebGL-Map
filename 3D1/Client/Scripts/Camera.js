@@ -71,40 +71,39 @@ XMap.Camera.prototype =
 
     _zoomIn : function() 
     {
-        if (this.position[1] < 11.0 && this.position[1] >= 2.0) {
-            this.speed = 0.25;
-        }
-        else if (this.position[1] < 2.0 && this.position[1] >= 1.0) {
-            this.speed = 0.05;
-        }
-        else if (this.position[1] < 1.0) {
-            this.speed = 0.005;
-        }
-        else if (this.position[1] < 0.1) {
-            this.speed = 0.0005;
-        }
-        else {
-            this.speed = 5.0;
-        }
+        if(this.position[1] > 0.03)
+        {
+            if (this.position[1] < 11.0 && this.position[1] >= 2.0) {
+                this.speed = 1.0;
+            }
+            else if (this.position[1] < 2.0 && this.position[1] >= 1.0) {
+                this.speed = 0.1;
+            }
+            else if (this.position[1] < 1.0) {
+                this.speed = 0.01;
+            }
+            
+            else {
+                this.speed = 10.0;
+            }
 
-        this.moveForward();
+            this.moveForward();
+        }
     },
 
     _zoomOut: function () {
         if (this.position[1] < 11.0 && this.position[1] >= 2.0) {
-            this.speed = 0.25;
+            this.speed = 1.0;
         }
         else if (this.position[1] < 2.0 && this.position[1] >= 1.0) {
-            this.speed = 0.05;
+            this.speed = 0.1;
         }
         else if (this.position[1] < 1.0) {
-            this.speed = 0.005;
+            this.speed = 0.01;
         }
-        else if (this.position[1] < 0.1) {
-            this.speed = 0.0005;
-        }
+        
         else {
-            this.speed = 5.0;
+            this.speed = 10.0;
         }
 
         this.moveBackward();        
