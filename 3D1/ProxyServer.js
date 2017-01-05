@@ -42,7 +42,7 @@ app.get('/image/', function (req, res)
     console.log(url);
 
     get(url, function (result) {
-        res.writeHead(200, { 'Content-Type': 'image/jpeg', 'Content-Length':result.length,'Cache-Control':'public, max-age:31536000' });
+        res.writeHead(200, { 'Content-Type': 'image/jpeg', 'Cache-Control':'public, max-age:86400', 'ETag': 'x234dff'});
         
         res.end(result, 'binary');
     });

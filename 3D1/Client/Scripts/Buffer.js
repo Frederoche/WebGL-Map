@@ -253,13 +253,13 @@ XMap.Buffer.prototype =
     prerender: function (node) {
         if (!node.elevationLoaded || !node.textureLoaded)
         {
-                 this.loaded = false;
+                this.loaded = false;
                 return;
         }
         this.loaded = true;
-       device.uniform3fv(this._shaderProgram.translationVector, node.center);
+        device.uniform3fv(this._shaderProgram.translationVector, node.center);
                
-       device.uniform3fv(this._shaderProgram.gridColor, node.colorVector);
+        device.uniform3fv(this._shaderProgram.gridColor, node.colorVector);
 
         this.lastScaleFactor = node.scaleFactor;
         device.uniform1f(this._shaderProgram.scaleFactor, node.scaleFactor);
