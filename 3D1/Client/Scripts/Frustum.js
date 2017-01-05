@@ -201,7 +201,7 @@ XMap.Frustum.prototype =
 
     },
 
-    /*isBoxInsideFrustum: function(bbox) //True = INSIDE, False = OUTSIDE
+    isBoxInsideFrustum: function(bbox) //True = INSIDE, False = OUTSIDE
     {
         var result = true;
 
@@ -213,29 +213,5 @@ XMap.Frustum.prototype =
                 result =  true;
         }
         return result;
-}*/
-
-isBoxInsideFrustum: function(bbox)
-  { 
-    for(var i = 0; i < 6; i++)
-    {
-        var out = 0;
-        
-        out += this.planes[i].distanceToPoint(vec3.create([bbox.min[0], bbox.min[1], bbox.min[2]])) < 0.0 ? 1 : 0;
-        out += this.planes[i].distanceToPoint(vec3.create([bbox.max[0], bbox.min[1], bbox.min[2]])) < 0.0 ? 1 : 0;
-        out += this.planes[i].distanceToPoint(vec3.create([bbox.min[0], bbox.max[1], bbox.min[2]])) < 0.0 ? 1 : 0;
-        out += this.planes[i].distanceToPoint(vec3.create([bbox.max[0], bbox.max[1], bbox.min[2]])) < 0.0 ? 1 : 0;
-        out += this.planes[i].distanceToPoint(vec3.create([bbox.min[0], bbox.min[1], bbox.max[2]])) < 0.0 ? 1 : 0;
-        out += this.planes[i].distanceToPoint(vec3.create([bbox.max[0], bbox.min[1], bbox.max[2]])) < 0.0 ? 1 : 0;
-        out += this.planes[i].distanceToPoint(vec3.create([bbox.min[0], bbox.max[1], bbox.max[2]])) < 0.0 ? 1 : 0;
-        out += this.planes[i].distanceToPoint(vec3.create([bbox.max[0], bbox.max[1], bbox.max[2]])) < 0.0 ? 1 : 0;
-        
-        if( out===8 ){ 
-            console.log(out);
-            return false;
-        }
     }
-    return true;
-}
-
 };

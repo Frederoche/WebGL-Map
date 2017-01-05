@@ -88,7 +88,7 @@ XMap.ThreeDEngine.prototype =
             alert("32 bit indices not supported");
         }
 
-        this.frustum = new XMap.Frustum(0.001, 800, 65, device.viewportWidth / device.viewportHeight);
+        this.frustum = new XMap.Frustum(0.01, 800, 65, device.viewportWidth / device.viewportHeight);
 
         var quadtreeOptions =
         {
@@ -104,7 +104,7 @@ XMap.ThreeDEngine.prototype =
         window.device.clearDepth(1);
         window.device.enable(window.device.DEPTH_TEST);
         window.device.depthMask(true);
-        //window.device.disable(window.device.BLEND);
+        window.device.disable(window.device.BLEND);
         window.device.enable(window.device.CULL_FACE);
         window.device.cullFace(window.device.FRONT);
 
@@ -165,6 +165,8 @@ XMap.ThreeDEngine.prototype =
         XMap.DOM.Events._displayPosition();
 
         this.frustum.extractPlanes(this.camera);
+
+        
 
         if (this.lastUpdateCall)
             cancelAnimationFrame(this.lastUpdateCall);

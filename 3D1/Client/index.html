@@ -6,8 +6,7 @@
     <link rel="icon" type="image/png" href="../Images/map-8.png" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0">
     <link href="../css/load.css" rel="stylesheet" />
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
-        rel="stylesheet" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" />
     <link href="../css/pageStyle.css" rel="stylesheet" />
     <script src="../Scripts/Pace.js"></script>
     <script src="../Scripts/gl-Matrix.js"></script>
@@ -134,8 +133,6 @@
             return mix(fogColor, originalColor , fogFactor);
         }
 
-
-
         void main(void)
         {
             vec4 ambiantColor =  vec4(0.3,0.3,0.3,1.0);
@@ -156,8 +153,6 @@
 
             vec4 texture = texture2D(sampler, texcoord);
             
-            
-
             vec4 finalColor = ambiantColor * texture;
 
             if(dot(normals.xyz, -lightDir) > 0.0)
@@ -180,13 +175,13 @@
 
         void main(void)
         {
-        gl_Position = projMatrix * viewMatrix * vec4(position.x, position.y, position.z, 1);
+            gl_Position = projMatrix * viewMatrix * vec4(position.x, position.y, position.z, 1);
         }
     </script>
 <script type="x-shader/x-fragment" id="ffrustShader" async>
         void main(void)
         {
-        gl_FragColor = vec4(1, 1, 1, 1);
+            gl_FragColor = vec4(1, 1, 1, 1);
         }
     </script>
 <script type="x-shader/x-vertex" id="vbboxShader" async>
@@ -199,25 +194,25 @@
 
         vec4 makeSphere(vec4 translatedPosition)
         {
-        float lon = translatedPosition.x / 162.9;
-        float lat = 2.0 * atan(exp(translatedPosition.z / 162.9)) - 3.1415/2.0;
+            float lon = translatedPosition.x / 162.9;
+            float lat = 2.0 * atan(exp(translatedPosition.z / 162.9)) - 3.1415/2.0;
 
-        return vec4(512.0 * cos(lat) * cos(lon), 512.0 * cos(lat) * sin(lon), 512.0 * sin(lat), 1.0);
+            return vec4(512.0 * cos(lat) * cos(lon), 512.0 * cos(lat) * sin(lon), 512.0 * sin(lat), 1.0);
         }
 
         void main(void)
         {
-        vec4 scaledPosition = vec4(scaleFactor * position.x,  position.y, scaleFactor * position.z, 1.0);
-        vec4 translatedPosition = vec4(scaledPosition.xyz + translationVector.xyz, 1.0);
+            vec4 scaledPosition = vec4(scaleFactor * position.x,  position.y, scaleFactor * position.z, 1.0);
+            vec4 translatedPosition = vec4(scaledPosition.xyz + translationVector.xyz, 1.0);
 
-        gl_Position = projMatrix  *  viewMatrix *translatedPosition;
+            gl_Position = projMatrix  *  viewMatrix *translatedPosition;
         }
 
     </script>
 <script type="x-shader/x-fragment" id="fbboxShader" async>
         void main(void)
         {
-        gl_FragColor = vec4(1, 0.5, 0, 1);
+            gl_FragColor = vec4(1, 0.5, 0, 1);
         }
     </script>
 <title>X-Map</title>
