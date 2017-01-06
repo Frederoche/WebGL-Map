@@ -260,7 +260,7 @@ XMap.Quadtree.prototype =
 
             //Blurring
             if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1)
-                this.draw(wireframe, frustum, node.parent, ext, delta/2 , tile);
+                this.draw(wireframe, frustum, node.parent, ext, delta , tile);
 
            
     

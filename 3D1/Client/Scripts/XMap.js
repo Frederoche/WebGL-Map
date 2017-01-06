@@ -49,7 +49,7 @@ XMap.Canvas = {
 
         var mouseDown = function(e) {
             XMap.DOM.Events.mousemove = true;
-
+             document.getElementById("autocomplete").style.display = 'none';
             XMap.DOM.Events.lastMouseX = e.clientX;
             XMap.DOM.Events.lastMouseY = e.clientY;
         };
@@ -213,6 +213,7 @@ XMap.DOM.Events =
                 XMap.Engine._engine.renderScene();
             });
         });
+        
 
         document.getElementById("coordinate").addEventListener("keyup", function (e) {
             
@@ -297,7 +298,8 @@ XMap.DOM.Events =
                 var z = mercator.getZ(li.lat);
 
                 XMap.Engine._engine.camera.position = vec3.create([x, 0.05, z]);
-                XMap.Engine._engine.camera.lookAt = vec3.create([x, -1.05, z]);
+                vec3.add(XMap.Engine._engine.camera.position, [Math.cos(XMap.Engine._engine.camera.angle) * Math.sin(XMap.Engine._engine.camera.pitch), 
+                Math.cos(XMap.Engine._engine.camera.pitch), Math.sin(XMap.Engine._engine.camera.angle) * Math.sin(XMap.Engine._engine.camera.pitch)], XMap.Engine._engine.camera.lookAt);
                 XMap.Engine._engine.camera.update();
 
                 document.getElementById("coordinate").value = li.cityName;
