@@ -164,7 +164,7 @@ XMap.Quadtree.prototype =
     },
 
     //node.type == 2 ---->leaf
-    draw: function (wireframe, frustum, node, ext, delta, tile) {
+    draw: function (wireframe, frustum, node, ext, delta, tile, jump) {
         
         if (node === undefined) 
         {
@@ -226,8 +226,6 @@ XMap.Quadtree.prototype =
                 return; 
             }
 
-             
-            
             if (!node.textureLoaded  && this.counter < 6) {
                 
                 node.getTexture(ext, function ()
@@ -259,8 +257,8 @@ XMap.Quadtree.prototype =
             }
 
             //Blurring
-            if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1)
-                this.draw(wireframe, frustum, node.parent, ext, delta , tile);
+            if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1 && !jump)
+                this.draw(wireframe, frustum, node.parent, ext, delta/2 , tile, jump);
 
            
     
@@ -288,7 +286,7 @@ XMap.Quadtree.prototype =
             {
                 for (var i = 0; i < 4; i++) 
                 {    
-                    this.draw(wireframe, frustum, node.child[i], ext, delta/2.0, tile); 
+                    this.draw(wireframe, frustum, node.child[i], ext, delta/2.0, tile, jump); 
                 }
             }
         }

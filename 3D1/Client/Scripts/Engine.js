@@ -20,7 +20,7 @@ XMap.ThreeDEngine = function(options) {
     this.frustum = {};
     
     this.wireFrame = {};
-    
+    this.jump = false;
     this.Wms = false;
     
     this._birdCamOn = false;
@@ -154,7 +154,7 @@ XMap.ThreeDEngine.prototype =
 
     renderScene: function () {
         
-        this.lastUpdateCall = requestAnimationFrame(this.renderScene.bind(this));
+        //this.lastUpdateCall = requestAnimationFrame(this.renderScene.bind(this));
 
         device.clear(device.COLOR_BUFFER_BIT | device.DEPTH_BUFFER_BIT);
         
@@ -172,7 +172,7 @@ XMap.ThreeDEngine.prototype =
         //PSEUDO-INSTANCED
         this.quadtree.setProgram();
             this.quadtree.setMatrixUniforms(this.projMatrix, this.viewMatrix, this.camera);
-            this.quadtree.draw(this.wireFrame, this.frustum, this.quadtree.rootNode, this.ext, 64, this.tileUrl);
+            this.quadtree.draw(this.wireFrame, this.frustum, this.quadtree.rootNode, this.ext, 64, this.tileUrl, this.jump);
         this.quadtree.disableProgram();
 
         this.lastUpdateCall = requestAnimationFrame(function () {

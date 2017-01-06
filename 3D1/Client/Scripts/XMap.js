@@ -210,6 +210,7 @@ XMap.DOM.Events =
                 cancelAnimationFrame(XMap.Engine._engine.lastUpdateCall);
             
             XMap.Engine._engine.lastUpdateCall = requestAnimationFrame(function() {
+                XMap.Engine._engine.jump = false;
                 XMap.Engine._engine.renderScene();
             });
         });
@@ -217,6 +218,9 @@ XMap.DOM.Events =
 
         document.getElementById("coordinate").addEventListener("keyup", function (e) {
             
+            document.getElementById("floating-div").style.transform = "translate(-440px)";
+            this._toggleOn = true;
+
             document.getElementById("autocomplete").style.display = 'block';
 
             var searchString = document.getElementById("coordinate").value;
@@ -291,12 +295,14 @@ XMap.DOM.Events =
             
             listElement.addEventListener("click", function ()
             {
+                if (XMap.Engine._engine.lastUpdateCall)
+                    cancelAnimationFrame(XMap.Engine._engine.lastUpdateCall);
                 var li = document.getElementById(this.id);
                 var mercator = new XMap.Mercator(XMap.Engine._engine.initialRootSize);
 
                 var x = mercator.getX(li.lng);
                 var z = mercator.getZ(li.lat);
-
+                XMap.Engine._engine.jump = true;
                 XMap.Engine._engine.camera.position = vec3.create([x, 0.05, z]);
                 vec3.add(XMap.Engine._engine.camera.position, [Math.cos(XMap.Engine._engine.camera.angle) * Math.sin(XMap.Engine._engine.camera.pitch), 
                 Math.cos(XMap.Engine._engine.camera.pitch), Math.sin(XMap.Engine._engine.camera.angle) * Math.sin(XMap.Engine._engine.camera.pitch)], XMap.Engine._engine.camera.lookAt);
@@ -305,9 +311,15 @@ XMap.DOM.Events =
                 document.getElementById("coordinate").value = li.cityName;
                 document.getElementById('autocomplete').innerHTML = '';
 
+                XMap.Engine._engine.lastUpdateCall = requestAnimationFrame(function() {
+                XMap.Engine._engine.renderScene();
+                
+            });
+
             });
 
             document.getElementById('autocomplete').appendChild(listElement);
+            
         }
     },
 
