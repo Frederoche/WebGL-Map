@@ -138,16 +138,20 @@ XMap.Quadtree.prototype =
         {
             if(parent.child[i].texture!==null && parent.child[i].texture.image!==null)
             {
-                device.deleteTexture(parent.child[i].texture);
+                
                 parent.child[i].texture.image.removeEventListener("load",parent.child[i].loadtextureHandler, false);
                 parent.child[i].texture.image = null;
+                device.deleteTexture(parent.child[i].texture);
+                parent.child[i].texture = null;
             }
 
             if(parent.child[i].elevation!==null && parent.child[i].elevation.image!==null)
             {
-                device.deleteTexture(parent.child[i].elevation);
+                
                 parent.child[i].elevation.image.removeEventListener("load",parent.child[i].loadElevation, false);
                 parent.child[i].elevation.image = null;
+                device.deleteTexture(parent.child[i].elevation);
+                parent.child[i].elevation = null;
             }
 
             if(parent.child[i].child.length > 0)
@@ -181,6 +185,7 @@ XMap.Quadtree.prototype =
                 
                 node.texture.image.removeEventListener("load",node.loadtextureHandler, false);
                 node.texture.image = null;
+                device.deleteTexture(node.texture);
             }
 
             if(node.elevation!==null && node.elevation.image!==null)
@@ -188,6 +193,7 @@ XMap.Quadtree.prototype =
                 
                 node.elevation.image.removeEventListener("load",node.loadElevation, false);
                 node.elevation.image = null;
+                device.deleteTexture(node.elevation);
             }
             node.type = 2;
             return;
@@ -219,6 +225,8 @@ XMap.Quadtree.prototype =
                 this.chunck.draw(wireframe);
                 return; 
             }
+
+             
             
             if (!node.textureLoaded  && this.counter < 6) {
                 
@@ -253,6 +261,8 @@ XMap.Quadtree.prototype =
             //Blurring
             if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1)
                 this.draw(wireframe, frustum, node.parent, ext, delta/2 , tile);
+
+           
     
         }
         else

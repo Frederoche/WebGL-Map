@@ -80,9 +80,12 @@ XMap.QuadtreeNode.prototype =
 
     loadtextureHandler : function(ext,callback)
     {
+        if(this.texture.image ===null)
+           { callback();return;}
+
         device.bindTexture(device.TEXTURE_2D, this.texture);
-            
-        device.texImage2D(device.TEXTURE_2D, 0, device.RGBA, device.RGBA, device.UNSIGNED_BYTE, this.texture.image);
+        
+        device.texImage2D(device.TEXTURE_2D, 0, device.RGB, device.RGB, device.UNSIGNED_BYTE, this.texture.image);
 
         device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MAG_FILTER, device.LINEAR);
         device.texParameteri(device.TEXTURE_2D, device.TEXTURE_MIN_FILTER, device.LINEAR_MIPMAP_LINEAR);
@@ -100,18 +103,21 @@ XMap.QuadtreeNode.prototype =
     getTexture: function (ext, callback)
     {
         if(this.textureLoaded)
-            callback();
-
+            {callback();return;}
+        
         this.texture = device.createTexture();
         this.texture.image = new Image(256, 256);
-
+        
         this.texture.image.addEventListener("load", this.loadtextureHandler.bind(this, ext, callback), false);
         this.texture.image.src = this.texturePath;
     },
 
     loadElevation :function(callback)
     {
-        device.bindTexture(device.TEXTURE_2D, this.elevation);
+            if(this.elevation.image ===null)
+                {callback();return;}
+
+            device.bindTexture(device.TEXTURE_2D, this.elevation);
 
             device.texImage2D(device.TEXTURE_2D, 0, device.RGBA, device.RGBA, device.UNSIGNED_BYTE, this.elevation.image);
 
