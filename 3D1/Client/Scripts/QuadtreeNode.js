@@ -80,6 +80,9 @@ XMap.QuadtreeNode.prototype =
 
     loadtextureHandler : function(ext,callback)
     {
+         if(this.texture ===null)
+                return;
+
         if(this.texture.image ===null)
            { callback();return;}
 
@@ -114,6 +117,9 @@ XMap.QuadtreeNode.prototype =
 
     loadElevation :function(callback)
     {
+            if(this.elevation ===null)
+                return;
+
             if(this.elevation.image ===null)
                 {callback();return;}
 
