@@ -253,6 +253,7 @@ XMap.Quadtree.prototype =
             if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1 && !jump && node.parent !== undefined)
             { 
               this.draw(wireframe, frustum, node.parent, ext, delta/2 , tile, jump);
+              return;
             }
         }
         else

@@ -18,7 +18,8 @@ XMap.ThreeDEngine = function(options) {
     this.quadtree = {};
     
     this.frustum = {};
-    
+   
+
     this.wireFrame = {};
     this.jump = false;
     this.Wms = false;
@@ -169,6 +170,8 @@ XMap.ThreeDEngine.prototype =
         if (this.lastUpdateCall)
             cancelAnimationFrame(this.lastUpdateCall);
 
+
+        
         //PSEUDO-INSTANCED
         this.quadtree.setProgram();
             this.quadtree.setMatrixUniforms(this.projMatrix, this.viewMatrix, this.camera);
