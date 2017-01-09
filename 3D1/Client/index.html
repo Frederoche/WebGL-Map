@@ -46,7 +46,7 @@
 
         vec3 calculateNormals(sampler2D sampler, vec2 textureCoord)
         {
-            float NORMAL_OFF = (1.0 / 128.0);
+            float NORMAL_OFF = (1.0 / 64.0);
 
             vec3 off = vec3(-NORMAL_OFF, 0, NORMAL_OFF);
 
@@ -115,6 +115,9 @@
         varying vec3 worldPosition;
 
         uniform sampler2D sampler;
+        uniform sampler2D elevationSampler;
+
+
         uniform vec3 gridColor;
         uniform vec3 cameraPosition;
 

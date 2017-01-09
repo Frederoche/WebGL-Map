@@ -162,7 +162,7 @@ XMap.Quadtree.prototype =
     },
 
     //node.type == 2 ---->leaf
-    draw: function (wireframe, frustum, node, ext, delta, tile, jump) {
+    draw: function (wireframe, frustum, node, ext, delta, tile) {
         
         if (node === undefined) 
         {
@@ -250,9 +250,9 @@ XMap.Quadtree.prototype =
             }
 
             //Blurring
-            if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1 && !jump && node.parent !== undefined)
+            if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1  && node.parent !== undefined)
             { 
-              this.draw(wireframe, frustum, node.parent, ext, delta/2 , tile, jump);
+              this.draw(wireframe, frustum, node.parent, ext, delta/2 , tile);
               return;
             }
         }
@@ -279,7 +279,7 @@ XMap.Quadtree.prototype =
             {
                 for (var i = 0; i < 4; i++) 
                 {    
-                    this.draw(wireframe, frustum, node.child[i], ext, delta/2.0, tile, jump); 
+                    this.draw(wireframe, frustum, node.child[i], ext, delta/2.0, tile); 
                 }
             }
         }

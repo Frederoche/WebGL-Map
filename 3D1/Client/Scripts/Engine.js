@@ -18,10 +18,8 @@ XMap.ThreeDEngine = function(options) {
     this.quadtree = {};
     
     this.frustum = {};
-   
-
     this.wireFrame = {};
-    this.jump = false;
+    
     this.Wms = false;
     
     this._birdCamOn = false;
@@ -96,7 +94,7 @@ XMap.ThreeDEngine.prototype =
             initialRootSize: this.initialRootSize,
             initialtexturePath: this.tileUrl,
             initialElevationPath: this.elevationUrl,
-            chunckSize: 128
+            chunckSize: 64
         };
 
         this.quadtree = new XMap.Quadtree(quadtreeOptions);
@@ -170,12 +168,10 @@ XMap.ThreeDEngine.prototype =
         if (this.lastUpdateCall)
             cancelAnimationFrame(this.lastUpdateCall);
 
-
-        
         //PSEUDO-INSTANCED
         this.quadtree.setProgram();
             this.quadtree.setMatrixUniforms(this.projMatrix, this.viewMatrix, this.camera);
-            this.quadtree.draw(this.wireFrame, this.frustum, this.quadtree.rootNode, this.ext, 64, this.tileUrl, this.jump);
+            this.quadtree.draw(this.wireFrame, this.frustum, this.quadtree.rootNode, this.ext, 64, this.tileUrl);
         this.quadtree.disableProgram();
 
         this.lastUpdateCall = requestAnimationFrame(function () {

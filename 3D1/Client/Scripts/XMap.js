@@ -210,7 +210,6 @@ XMap.DOM.Events =
                 cancelAnimationFrame(XMap.Engine._engine.lastUpdateCall);
             
             XMap.Engine._engine.lastUpdateCall = requestAnimationFrame(function() {
-                XMap.Engine._engine.jump = false;
                 XMap.Engine._engine.renderScene();
             });
         });
@@ -303,11 +302,10 @@ XMap.DOM.Events =
 
                 var x = mercator.getX(li.lng);
                 var z = mercator.getZ(li.lat);
-                
-                XMap.Engine._engine.jump = true;
+
                 XMap.Engine._engine.camera.position = vec3.create([x, 0.05, z]);
-                vec3.add(XMap.Engine._engine.camera.position, [Math.cos(XMap.Engine._engine.camera.angle) * Math.sin(XMap.Engine._engine.camera.pitch), 
-                Math.cos(XMap.Engine._engine.camera.pitch), Math.sin(XMap.Engine._engine.camera.angle) * Math.sin(XMap.Engine._engine.camera.pitch)], XMap.Engine._engine.camera.lookAt);
+                XMap.Engine._engine.camera.lookAt = vec3.create([x, -1.05, z]);
+                XMap.Engine._engine.camera.pitch =   Math.PI;
                 XMap.Engine._engine.camera.update();
 
                 document.getElementById("coordinate").value = li.cityName;
