@@ -220,7 +220,7 @@ XMap.Quadtree.prototype =
                 && node.parent.child[1].textureLoaded && node.parent.child[1].elevationLoaded
                 && node.parent.child[2].textureLoaded && node.parent.child[2].elevationLoaded
                 && node.parent.child[3].textureLoaded && node.parent.child[3].elevationLoaded) {
-               
+                
                 this.chunck.prerender(node);
                 this.chunck.draw(wireframe);
                 return; 
@@ -257,11 +257,10 @@ XMap.Quadtree.prototype =
             }
 
             //Blurring
-            if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1 && !jump)
-                this.draw(wireframe, frustum, node.parent, ext, delta/2 , tile, jump);
-
-           
-    
+            if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1 && !jump && node.parent !== undefined)
+            { 
+              this.draw(wireframe, frustum, node.parent, ext, delta/2 , tile, jump);
+            }
         }
         else
         {

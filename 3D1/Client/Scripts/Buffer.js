@@ -251,6 +251,7 @@ XMap.Buffer.prototype =
     },
 
     prerender: function (node) {
+        
         if (!node.elevationLoaded || !node.textureLoaded)
         {
                 this.loaded = false;

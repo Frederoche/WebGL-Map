@@ -14,18 +14,19 @@ XMap.Geocoding.prototype =
     sendRequest: function (callback)
     {
         var request = new XMLHttpRequest();
-        
-        request.onload = request.onreadystatechange = function() {
-            if (request.readyState == 4)
+        request.open('GET', this.searchUrl, true);
+
+        var loadHandler = function()
+        {
+             if (request.readyState == 4)
             {
                 if (request.status == 200) {
-
                     callback(request.responseText);
                 }
             }
         };
 
-        request.open('GET', this.searchUrl, true);
+        request.addEventListener("load", loadHandler, false);
         request.send();
     }
 };

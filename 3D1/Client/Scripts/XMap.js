@@ -297,11 +297,13 @@ XMap.DOM.Events =
             {
                 if (XMap.Engine._engine.lastUpdateCall)
                     cancelAnimationFrame(XMap.Engine._engine.lastUpdateCall);
+
                 var li = document.getElementById(this.id);
                 var mercator = new XMap.Mercator(XMap.Engine._engine.initialRootSize);
 
                 var x = mercator.getX(li.lng);
                 var z = mercator.getZ(li.lat);
+                
                 XMap.Engine._engine.jump = true;
                 XMap.Engine._engine.camera.position = vec3.create([x, 0.05, z]);
                 vec3.add(XMap.Engine._engine.camera.position, [Math.cos(XMap.Engine._engine.camera.angle) * Math.sin(XMap.Engine._engine.camera.pitch), 
