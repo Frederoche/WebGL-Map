@@ -21,12 +21,10 @@
         id:''
     };
 
-
     this.rootNode = new XMap.QuadtreeNode(rootNodeOption);
 
     this._Wms = new XMap.Wms(option.initialRootSize);
     this.counter = 0;
-
 };
 
 
@@ -215,15 +213,10 @@ XMap.Quadtree.prototype =
                 node.updateTexturePath(tile);
             }
 
-            if (node.parent!== undefined 
-                && node.parent.child[0].textureLoaded && node.parent.child[0].elevationLoaded
-                && node.parent.child[1].textureLoaded && node.parent.child[1].elevationLoaded
-                && node.parent.child[2].textureLoaded && node.parent.child[2].elevationLoaded
-                && node.parent.child[3].textureLoaded && node.parent.child[3].elevationLoaded) {
-                
+            if (node.elevationLoaded && node.textureLoaded) 
+            {
                 this.chunck.prerender(node);
-                this.chunck.draw(wireframe);
-                return; 
+                this.chunck.draw(wireframe);   
             }
 
             if (!node.textureLoaded  && this.counter < 6) {
