@@ -83,8 +83,8 @@ XMap.Chunck.prototype =
                     vertices[k + 2] = -1 + 2 * (i - 1) / this.size;
                 }
                 
-                vertices[k + 3] = j / (this.size);
-                vertices[k + 4] = i / (this.size);
+                vertices[k + 3] = j / (this.size+1);
+                vertices[k + 4] = i / (this.size+1);
 
                
                 k += 5;
