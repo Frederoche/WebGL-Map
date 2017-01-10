@@ -238,7 +238,7 @@ XMap.Quadtree.prototype =
 
                 node.getElevationFromWms(this._Wms.url, function ()
                 {
-                    if(node.elevation.image ===null)
+                    if(node.elevation.image === null)
                         return;
 
                     node.elevationLoaded = true; 
@@ -250,9 +250,9 @@ XMap.Quadtree.prototype =
             }
 
             //Blurring
-            if ((!node.elevationLoaded || !node.textureLoaded) && node.type === 1  && node.parent !== undefined)
+            if ((!node.elevationLoaded || !node.textureLoaded) && node.parent !== undefined)
             { 
-              this.draw(wireframe, frustum, node.parent, ext, delta/2 , tile);
+              this.draw(wireframe, frustum, node.parent, ext, delta /64 , tile);
               return;
             }
         }
