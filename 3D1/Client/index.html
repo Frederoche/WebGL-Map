@@ -31,14 +31,12 @@
         uniform vec3 translationVector;
         uniform float scaleFactor;
         
-
         precision highp sampler2D;
         uniform sampler2D elevationSampler;
 
         attribute vec3 position;
         attribute vec2 texCoord;
 
-        
         varying vec2 texcoord;
         varying vec3 viewSpace;
         varying vec3 worldPosition;
@@ -46,12 +44,11 @@
         void main(void)
         {
            
+        vec4 altvec = texture2D(elevationSampler, texCoord);
+    
+        highp float h = (altvec.r * 65536.0 + altvec.g * 256.0 + altvec.b ) / 16777215.0 * 1000.0  - 1.96;
 
-            vec4 altvec = texture2D(elevationSampler, texCoord);
-        
-            highp float h = (altvec.r * 65536.0 + altvec.g * 256.0 + altvec.b ) / 16777215.0 * 1000.0  - 1.96;
-
-            vec4 scaledPosition;
+        vec4 scaledPosition;
 
         if(scaleFactor < 1.0)
             scaledPosition = vec4(scaleFactor * position.x, position.y * scaleFactor  + h, scaleFactor * position.z, 1.0);
@@ -72,11 +69,9 @@
         }
     </script>
 <script type="x-shader/x-fragment" id="fShader">
-        #ifdef GL_FRAGMENT_PRECISION_HIGH
+        
         precision highp float;
-        #else
-        precision mediump float;
-        #endif
+       
 
         varying vec2 texcoord;
         varying vec3 viewSpace;
