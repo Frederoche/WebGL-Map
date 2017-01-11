@@ -213,13 +213,17 @@ XMap.Quadtree.prototype =
                 node.updateTexturePath(tile);
             }
 
-            if (node.elevationLoaded && node.textureLoaded) 
+            if (node.parent !== undefined && node.parent.child[0].elevationLoaded && node.parent.child[0].textureLoaded &&
+                node.parent.child[1].elevationLoaded && node.parent.child[1].textureLoaded &&
+                node.parent.child[2].elevationLoaded && node.parent.child[2].textureLoaded &&
+                node.parent.child[3].elevationLoaded && node.parent.child[3].textureLoaded)
+
             {
                 this.chunck.prerender(node);
                 this.chunck.draw(wireframe);   
             }
 
-            if (!node.textureLoaded  && this.counter < 6) {
+            if (!node.textureLoaded ) {
                 
                 node.getTexture(ext, function ()
                 {
@@ -230,10 +234,9 @@ XMap.Quadtree.prototype =
                     node.texture.image.removeEventListener("load",node.loadtextureHandler, false);
                     node.texture.image = null;
                 });
-                this.counter++;
             }
 
-            if (!node.elevationLoaded  && this.counter < 6) {
+            if (!node.elevationLoaded) {
                 this._Wms.prepareRequest(node);
 
                 node.getElevationFromWms(this._Wms.url, function ()
@@ -245,42 +248,19 @@ XMap.Quadtree.prototype =
                     node.elevation.image.removeEventListener("load", node.loadElevation, false);
                     node.elevation.image = null;
                 });
-
-                this.counter++;
             }
 
             //Blurring
             if ((!node.elevationLoaded || !node.textureLoaded) && node.parent !== undefined)
             { 
               this.draw(wireframe, frustum, node.parent, ext, delta /64 , tile);
-              return;
             }
         }
         else
         {
-            if (node.type !== 1)
-            {
-
-                this._Wms.prepareRequest(node);
-
-                node.getElevationFromWms(this._Wms.url, function ()
-                {
-                    if(node.elevation.image ===null)
-                        return;
-
-                    node.elevationLoaded = true; 
-                    node.elevation.image.removeEventListener("load", node.loadElevation, false);
-                    node.elevation.image = null;
-                });
-
-                this.counter++;
-            }
-            else if(node.type === 1 && node.child.length > 0)
-            {
-                for (var i = 0; i < 4; i++) 
-                {    
-                    this.draw(wireframe, frustum, node.child[i], ext, delta/2.0, tile); 
-                }
+            for (var i = 0; i < 4; i++) 
+            {    
+                this.draw(wireframe, frustum, node.child[i], ext, delta/2.0, tile); 
             }
         }
     }
