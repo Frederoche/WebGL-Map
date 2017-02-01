@@ -135,7 +135,6 @@ XMap.DOM.Events =
         document.getElementById("sk-tile").addEventListener("click", function () { XMap.Engine._engine.setTileUrl(XMap.Url.tileUrlStatensKartverk); }, false);
         document.getElementById("thunderforest-tile").addEventListener("click", function () { XMap.Engine._engine.setTileUrl(XMap.Url.tileUrlthunderForest); }, false);
         document.getElementById("tileStammen-tile").addEventListener("click", function () { XMap.Engine._engine.tileUrl = XMap.Url.tileUrlStammen; }, false);
-        document.getElementById("mapquest").addEventListener("click", function () { XMap.Engine._engine.tileUrl = XMap.Url.mapQuest; }, false);
         document.getElementById("google").addEventListener("click", function () { XMap.Engine._engine.tileUrl = XMap.Url.google; }, false);
         document.getElementById("Wms").addEventListener("click", function () { XMap.Engine._engine.Wms = true; }, false);
 

@@ -7,11 +7,7 @@ var router          = express.Router();
 
 app.use(express.static('Client'));
 
-var agent = new http.Agent({
-  keepAlive: true,
-  maxSockets: 100000,
-  keepAliveMsecs: 3000
-});
+
 
 var get = function(url, callback) {
 

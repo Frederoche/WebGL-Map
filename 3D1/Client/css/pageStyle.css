@@ -358,16 +358,10 @@ div#floating-div {
 
 }
 
-#mapquest {
-    position:absolute;
-    left:30px;
-    top:390px;
-}
-
 #google {
     position:absolute;
     left:30px;
-    top:440px;
+    top:390px;
 }
 
 #wireframe-lbl {
