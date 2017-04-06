@@ -24,72 +24,201 @@
     <script src="../Scripts/Frustum.js" async></script>
     <script src="../Scripts/XMap.js" async></script>
     <script type="x-shader/x-vertex" id="vShader">
-        precision highp sampler2D; precision mediump float; uniform mat4 projMatrix; uniform mat4 viewMatrix; uniform vec3 translationVector; uniform float scaleFactor; uniform sampler2D elevationSampler; attribute vec3 position; attribute vec2 texCoord; varying
-        vec2 texcoord; varying vec3 viewSpace; varying vec3 worldPosition; void main(void) { vec4 altvec = texture2D(elevationSampler, texCoord); float h = (altvec.r * 65536.0 + altvec.g * 256.0 + altvec.b ) / 16777215.0 * 1000.0 - 1.96; vec4 scaledPosition;
-        scaledPosition = vec4(scaleFactor * position.x, position.y * scaleFactor + h, scaleFactor * position.z, 1.0); vec4 translatedPosition = vec4(scaledPosition.xyz + translationVector.xyz, 1.0); viewSpace = (viewMatrix * translatedPosition).xyz; vec4
-        pos = translatedPosition; texcoord = texCoord; worldPosition = (projMatrix * viewMatrix * pos).xyz; gl_Position = projMatrix * viewMatrix * pos; }
-    </script>
-    <script type="x-shader/x-fragment" id="fShader">
+        precision highp sampler2D;
+        precision mediump float;
 
-        precision highp float; precision highp sampler2D; varying vec2 texcoord; varying vec3 viewSpace; varying vec3 worldPosition; uniform sampler2D sampler; uniform sampler2D elevationSampler; uniform vec3 gridColor; uniform vec3 cameraPosition; vec3 calculateNormals(sampler2D
-        sampler, vec2 textureCoord) { float NORMAL_OFF = (1.0 / 128.0); vec3 off = vec3(-NORMAL_OFF, 0, NORMAL_OFF); vec4 tex = texture2D(sampler, textureCoord.xy); vec4 tex0 = texture2D(sampler, vec2(textureCoord.xy + off.xy)); vec4 tex1 = texture2D(sampler,
-        vec2(textureCoord.xy + off.zy)); vec4 tex2 = texture2D(sampler, vec2(textureCoord.xy + off.yx)); vec4 tex3 = texture2D(sampler, vec2(textureCoord.xy + off.yz)); float s11 = (tex.x * 65536.0 + tex.y * 256.0 + tex.z) / 16777215.0 * 1000.0 - 1.96;
-        float s01 = (tex0.x * 65536.0 + tex0.y * 256.0 + tex0.z) / 16777215.0 * 1000.0 - 1.96; float s21 = (tex1.x * 65536.0 + tex1.y * 256.0 + tex1.z) / 16777215.0 * 1000.0 - 1.96; float s10 = (tex2.x * 65536.0 + tex2.y * 256.0 + tex2.z) / 16777215.0
-        * 1000.0 - 1.96; float s12 = (tex3.x * 65536.0 + tex3.y * 256.0 + tex3.z) / 16777215.0 * 1000.0 - 1.96; vec3 va = normalize( vec3(off.zy, s21 - s11) ); vec3 vb = normalize( vec3(off.yz, s12 - s11) ); vec3 norm = cross(va, vb); norm = norm * 0.5
-        + 0.5; return norm; } void main(void) { vec4 ambiantColor = vec4(0.2,0.2,0.2,1.0); vec4 diffuseColor = vec4(0.5,0.5,0.6,1.0); vec4 specularColor = vec4(0.5,0.5,0.5,1.0); vec3 lightPosition = vec3(10000.0, 100000.0, 100000.0); vec3 lightDir = worldPosition
-        - lightPosition; lightDir = normalize(lightDir); vec3 Normals = calculateNormals(elevationSampler, texcoord); diffuseColor = dot(Normals.xyz, -lightDir) * diffuseColor; vec3 vertexToEye = -normalize(worldPosition); vec3 lightReflect = normalize(reflect(Normals,
-        lightDir)); float specularfactor = pow(max(dot(vertexToEye, lightReflect),0.0),3.0); vec4 texture = texture2D(sampler, texcoord); vec4 finalColor = ambiantColor * texture; if(dot(Normals.xyz, -lightDir) > 0.0) { finalColor += diffuseColor * texture
-        + specularColor * specularfactor; } gl_FragColor = vec4(finalColor.xyz , 1.0); }
+        uniform mat4 projMatrix;
+        uniform mat4 viewMatrix;
+        uniform vec3 translationVector;
+        uniform float scaleFactor;
+        
+        uniform sampler2D elevationSampler;
+
+        attribute vec3 position;
+        attribute vec2 texCoord;
+
+        varying vec2 texcoord;
+        varying vec3 viewSpace;
+        varying vec3 worldPosition;
+
+        void main(void)
+        {
+            vec4 altvec = texture2D(elevationSampler, texCoord);
+        
+            float h = (altvec.r * 65536.0 + altvec.g * 256.0 + altvec.b ) / 16777215.0 * 1000.0 -1.96;
+
+            vec4 scaledPosition;
+
+            if(scaleFactor < 1.0)
+             scaledPosition = vec4(scaleFactor * position.x, position.y * scaleFactor  + h, scaleFactor * position.z, 1.0);
+           else
+             scaledPosition = vec4(scaleFactor * position.x, position.y /scaleFactor  + h, scaleFactor * position.z, 1.0);
+           
+            vec4 translatedPosition = vec4(scaledPosition.xyz + translationVector.xyz, 1.0);
+
+            viewSpace = (viewMatrix * translatedPosition).xyz;
+            
+            vec4 pos = translatedPosition;
+            
+            texcoord = texCoord;
+            worldPosition = (projMatrix  *  viewMatrix * pos).xyz;
+            gl_Position = projMatrix  *  viewMatrix * pos;
+        }
+    </script>
+<script type="x-shader/x-fragment" id="fShader">
+        
+        precision highp float;
+        precision highp sampler2D;
+
+        varying vec2 texcoord;
+        varying vec3 viewSpace;
+        varying vec3 worldPosition;
+
+        uniform sampler2D sampler;
+        uniform sampler2D elevationSampler;
+
+
+        uniform vec3 gridColor;
+        uniform vec3 cameraPosition;
+
+        vec3 calculateNormals(sampler2D sampler, vec2 textureCoord)
+        {
+            float NORMAL_OFF = (1.0 / 128.0);
+
+            vec3 off = vec3(-NORMAL_OFF, 0, NORMAL_OFF);
+
+            vec4 tex  = texture2D(sampler, textureCoord.xy);
+            vec4 tex0 = texture2D(sampler, vec2(textureCoord.xy + off.xy));
+            vec4 tex1 = texture2D(sampler, vec2(textureCoord.xy + off.zy));
+            vec4 tex2 = texture2D(sampler, vec2(textureCoord.xy + off.yx));
+            vec4 tex3 = texture2D(sampler, vec2(textureCoord.xy + off.yz));
+
+            float s11 = (tex.x  * 65536.0 + tex.y  * 256.0 + tex.z)  / 16777215.0 * 1000.0 - 1.96;
+            float s01 = (tex0.x * 65536.0 + tex0.y * 256.0 + tex0.z) / 16777215.0 * 1000.0 - 1.96;
+            float s21 = (tex1.x * 65536.0 + tex1.y * 256.0 + tex1.z) / 16777215.0 * 1000.0 - 1.96;
+            float s10 = (tex2.x * 65536.0 + tex2.y * 256.0 + tex2.z) / 16777215.0 * 1000.0 - 1.96;
+            float s12 = (tex3.x * 65536.0 + tex3.y * 256.0 + tex3.z) / 16777215.0 * 1000.0 - 1.96;
+
+            vec3 va = normalize( vec3(off.zy, s21 - s11) );
+            vec3 vb = normalize( vec3(off.yz, s12 - s11) );
+
+            vec3 norm = cross(va, vb);
+            norm = norm * 0.5 + 0.5;
+            return norm;
+        }
+
+        void main(void)
+        {
+            vec4 ambiantColor =  vec4(0.2,0.2,0.2,1.0);
+            vec4 diffuseColor =  vec4(0.5,0.5,0.6,1.0);
+            vec4 specularColor = vec4(0.5,0.5,0.5,1.0);
+
+            vec3 lightPosition = vec3(10000.0, 100000.0, 100000.0);
+
+            vec3 lightDir =  worldPosition - lightPosition;
+            lightDir = normalize(lightDir);
+
+            vec3 Normals = calculateNormals(elevationSampler, texcoord);
+
+            diffuseColor = dot(Normals.xyz, -lightDir) * diffuseColor;
+
+            vec3 vertexToEye  = -normalize(worldPosition);
+            vec3 lightReflect =  normalize(reflect(Normals, lightDir));
+
+            float specularfactor = pow(max(dot(vertexToEye, lightReflect),0.0),3.0);
+
+            vec4 texture = texture2D(sampler, texcoord);
+            
+            vec4 finalColor = ambiantColor * texture;
+
+            if(dot(Normals.xyz, -lightDir) > 0.0)
+            {
+                finalColor +=  diffuseColor * texture +  specularColor * specularfactor;
+            }
+
+            gl_FragColor = vec4(finalColor.xyz , 1.0); 
+
+        }
 
     </script>
-    <script type="x-shader/x-vertex" id="vfrustShader">
-        precision mediump float; uniform mat4 projMatrix; uniform mat4 viewMatrix; attribute vec3 position; void main(void) { gl_Position = projMatrix * viewMatrix * vec4(position.x, position.y, position.z, 1.0); }
+<script type="x-shader/x-vertex" id="vfrustShader">
+        precision mediump float;
+
+        uniform mat4 projMatrix;
+        uniform mat4 viewMatrix;
+
+        attribute vec3 position;
+
+        void main(void)
+        {
+            gl_Position = projMatrix * viewMatrix * vec4(position.x, position.y, position.z, 1.0);
+        }
     </script>
-    <script type="x-shader/x-fragment" id="ffrustShader">
-        void main(void) { gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0); }
+<script type="x-shader/x-fragment" id="ffrustShader">
+        void main(void)
+        {
+            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+        }
     </script>
-    <script type="x-shader/x-vertex" id="vbboxShader" async>
-        uniform mat4 projMatrix; uniform mat4 viewMatrix; uniform vec3 translationVector; uniform float scaleFactor; attribute vec3 position; void main(void) { vec4 scaledPosition = vec4(scaleFactor * position.x, position.y, scaleFactor * position.z, 1.0); vec4
-        translatedPosition = vec4(scaledPosition.xyz + translationVector.xyz, 1.0); gl_Position = projMatrix * viewMatrix *translatedPosition; }
+<script type="x-shader/x-vertex" id="vbboxShader" async>
+        uniform mat4 projMatrix;
+        uniform mat4 viewMatrix;
+        uniform vec3 translationVector;
+        uniform float scaleFactor;
+
+        attribute vec3 position;
+
+       
+        
+        void main(void)
+        {
+            vec4 scaledPosition = vec4(scaleFactor * position.x,  position.y, scaleFactor * position.z, 1.0);
+            vec4 translatedPosition = vec4(scaledPosition.xyz + translationVector.xyz, 1.0);
+
+            gl_Position = projMatrix  *  viewMatrix *translatedPosition;
+        }
 
     </script>
-    <script type="x-shader/x-fragment" id="fbboxShader" async>
-        void main(void) { gl_FragColor = vec4(1.0, 0.5, 0.0, 1.0); }
+<script type="x-shader/x-fragment" id="fbboxShader" async>
+        void main(void)
+        {
+            gl_FragColor = vec4(1.0, 0.5, 0.0, 1.0);
+        }
     </script>
-    <title>X-Map</title>
+<title>X-Map</title>
 </head>
 
 <body>
     <button id="menu"></button>
+  
 
 
+<div id="floating-div">
+    <div class="ui-position">
+        <label id="camera-x">camera-x:</label><label id="positionx"></label>
+        <label id="camera-y">camera-y:</label><label id="positiony"></label>
+        <label id="camera-z">camera-z:</label><label id="positionz"></label>
 
-    <div id="floating-div">
-        <div class="ui-position">
-            <label id="camera-x">camera-x:</label><label id="positionx"></label>
-            <label id="camera-y">camera-y:</label><label id="positiony"></label>
-            <label id="camera-z">camera-z:</label><label id="positionz"></label>
+        <label id="camera-lat">camera-lat:</label><label id="position-lat"></label>
+        <label id="camera-lng">camera-lng:</label><label id="position-lng"></label>
 
-            <label id="camera-lat">camera-lat:</label><label id="position-lat"></label>
-            <label id="camera-lng">camera-lng:</label><label id="position-lng"></label>
-
-            <label id="fps-title">FPS:</label><label id="fps"></label>
-        </div>
-        <input type="button" id="bing-tile" value="Bing" />
-        <input type="button" id="sk-tile" value="Norkart" />
-        <input type="button" id="thunderforest-tile" value="Thunderforest" />
-
-        <label id="wireframe-lbl">Wireframe</label><input type="checkbox" id="wireframe" />
-        <label id="bird-cam-lbl">Bird-Cam</label><input type="checkbox" id="bird-cam" />
-        <label id="spherify-lbl" hidden="hidden">Spherify</label><input type="checkbox" id="spherify" hidden="hidden">
-        <label id="bbox-lbl" hidden="hidden">BBox</label><input type="checkbox" id="bbox" hidden="hidden">
-        <label id="Wms-lbl" hidden="hidden">WMS</label><input type="checkbox" id="Wms" hidden="hidden">
+        <label id="fps-title">FPS:</label><label id="fps"></label>
     </div>
-    <button id="mylocation"></button>
-    <button id="zoomin"></button>
-    <button id="zoomout"></button>
-    <button id="lookup"></button>
-    <button id="lookdown"></button>
+    <input type="button" id="bing-tile" value="Bing" />
+    <input type="button" id="sk-tile" value="Norkart" />
+    <input type="button" id="thunderforest-tile" value="Thunderforest" />
+    
+    <label id="wireframe-lbl">Wireframe</label><input type="checkbox" id="wireframe" />
+    <label id="bird-cam-lbl">Bird-Cam</label><input type="checkbox" id="bird-cam" />
+    <label id="spherify-lbl" hidden="hidden">Spherify</label><input type="checkbox" id="spherify" hidden="hidden">
+    <label id="bbox-lbl" hidden="hidden">BBox</label><input type="checkbox" id="bbox" hidden="hidden">
+    <label id="Wms-lbl" hidden="hidden">WMS</label><input type="checkbox" id="Wms" hidden="hidden">
+</div>
+<button id="mylocation"></button>
+<button id="zoomin"></button>
+<button id="zoomout"></button>
+<button id="lookup"></button>
+<button id="lookdown"></button>
 </body>
 
 </html>
