@@ -7,7 +7,7 @@ To run the project:
 
 #Run the program
 
-Run: node ProxyServer.js in the corresponding project folder 3D1,
+Run: node app.js in the corresponding project folder,
 browse to: http://localhost:8000
 
 <img src="https://github.com/Frederoche/WebGL-Map/blob/master/Capture.PNG" width=600>
@@ -17,7 +17,6 @@ browse to: http://localhost:8000
 
 - It works on Edge, Chrome, Opera, Firefox.
 - it works now with nodejs.
-
 
 Further work:
 
