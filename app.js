@@ -1,7 +1,7 @@
 ﻿var express = require('express');
 var app = express();
 var http = require('http');
-var compression = require('compression');
+
 
 var router = express.Router();
 
@@ -28,7 +28,7 @@ var get = function(url, callback) {
 };
 
 
-app.use(compression());
+
 app.set('view cache', true);
 
 app.get('/image/', function(req, res) {
