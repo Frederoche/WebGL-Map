@@ -1,15 +1,23 @@
 {
-    "name": "3d1",
-    "version": "1.0.0",
-    "description": "",
-    "main": "app.js",
-    "scripts": {
-        "start": "node app.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "express": "^4.15.2"
-    }
+  "name": "3d1",
+  "version": "1.0.0",
+  "description": "A world map in webgl. \r It is writen in pure javascript without the use of extrenal libraries.\r It is based on a quadtree structure.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Frederoche/WebGL-Map.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Frederoche/WebGL-Map/issues"
+  },
+  "homepage": "https://github.com/Frederoche/WebGL-Map#readme"
 }
