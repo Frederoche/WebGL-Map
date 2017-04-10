@@ -1,0 +1,19 @@
+{
+  "name": "webgl-map",
+  "version": "1.0.0",
+  "description": "A world map in webgl. \r It is writen in pure javascript without the use of extrenal libraries.\r It is based on a quadtree structure.",
+  "main": "Licence.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Frederoche/WebGL-Map.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Frederoche/WebGL-Map/issues"
+  },
+  "homepage": "https://github.com/Frederoche/WebGL-Map#readme"
+}
