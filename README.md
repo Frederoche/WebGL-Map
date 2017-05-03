@@ -24,5 +24,8 @@ Further work:
 - Make it possible to use the map without mouse event handler (mobile, tablette).
 - Make it possible to Spherify the earth..
 
+<a href="https://www.youtube.com/watch?v=rs5mJJmoVew&list=PLX4dsjt6kyOgM_dQxCG6KUZ62ainphz5t&index=5">Video</a>
+
 # License
  https://github.com/Frederoche/WebGL-Map/blob/master/Licence.js
+
