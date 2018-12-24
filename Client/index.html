@@ -123,7 +123,7 @@
             diffuseColor = dot(Normals.xyz, lightDir) * diffuseColor;
 
             vec3 vertexToEye  =  normalize(cameraPosition - worldPosition);
-            vec3 lightReflect =  normalize(reflect(Normals, lightDir));
+            vec3 lightReflect =  normalize(reflect(-lightDir, Normals));
 
             float specularfactor = pow(max(dot(vertexToEye, lightReflect),0.0),0.15);
 
