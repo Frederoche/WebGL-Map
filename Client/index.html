@@ -61,7 +61,7 @@
             vec4 pos = translatedPosition;
             
             texcoord = texCoord;
-            worldPosition = (projMatrix  *  viewMatrix * pos).xyz;
+            worldPosition = pos.xyz;
             gl_Position = projMatrix  *  viewMatrix * pos;
         }
     </script>
