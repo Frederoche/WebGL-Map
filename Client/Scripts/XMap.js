@@ -81,7 +81,7 @@ XMap.Engine = {
 
         this._engine = new XMap.ThreeDEngine(engineOptions);
         this._engine.init();
-        this._engine.tileUrl = XMap.Url.tileUrlStatensKartverk;
+        this._engine.tileUrl = XMap.Url.tileUrlBing;
     },
 
     render: function() {

@@ -164,7 +164,7 @@ XMap.Quadtree.prototype =
   
     draw: function (wireframe, frustum, node, ext, delta, tile) {
         
-        if (node === undefined) 
+        if (!node) 
         {
             return;
         }
@@ -213,17 +213,16 @@ XMap.Quadtree.prototype =
                 node.updateTexturePath(tile);
             }
 
-            if (node.parent !== undefined && node.elevationLoaded && node.textureLoaded)
-
+            if (node.textureLoaded)
             {
                 this.chunck.prerender(node);
-                this.chunck.draw(wireframe);   
+                this.chunck.draw(wireframe);
             }
 
             //Blurring
-            if ((!node.elevationLoaded || !node.textureLoaded) && node.parent !== undefined )
+            if (!node.textureLoaded && node.parent)
             { 
-              this.draw(wireframe, frustum, node.parent, ext, delta /64 , tile);
+              this.draw(wireframe, frustum, node.parent, ext, delta, tile);
             }
 
             if (!node.textureLoaded ) {
@@ -236,6 +235,7 @@ XMap.Quadtree.prototype =
                     node.textureLoaded = true;
                     node.texture.image.removeEventListener("load",node.loadtextureHandler, false);
                     node.texture.image = null;
+                    
                 });
             }
 
@@ -250,6 +250,7 @@ XMap.Quadtree.prototype =
                     node.elevationLoaded = true; 
                     node.elevation.image.removeEventListener("load", node.loadElevation, false);
                     node.elevation.image = null;
+                    
                 });
             }
 

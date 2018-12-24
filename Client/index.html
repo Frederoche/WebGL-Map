@@ -83,7 +83,7 @@
 
         vec3 calculateNormals(sampler2D sampler, vec2 textureCoord)
         {
-            float NORMAL_OFF = (1.0 / 128.0);
+            float NORMAL_OFF = (1.0 / 256.0);
 
             vec3 off = vec3(-NORMAL_OFF, 0, NORMAL_OFF);
 
@@ -93,11 +93,11 @@
             vec4 tex2 = texture2D(sampler, vec2(textureCoord.xy + off.yx));
             vec4 tex3 = texture2D(sampler, vec2(textureCoord.xy + off.yz));
 
-            float s11 = (tex.x  * 65536.0 + tex.y  * 256.0 + tex.z)  / 16777215.0 * 1000.0 - 1.96;
-            float s01 = (tex0.x * 65536.0 + tex0.y * 256.0 + tex0.z) / 16777215.0 * 1000.0 - 1.96;
-            float s21 = (tex1.x * 65536.0 + tex1.y * 256.0 + tex1.z) / 16777215.0 * 1000.0 - 1.96;
-            float s10 = (tex2.x * 65536.0 + tex2.y * 256.0 + tex2.z) / 16777215.0 * 1000.0 - 1.96;
-            float s12 = (tex3.x * 65536.0 + tex3.y * 256.0 + tex3.z) / 16777215.0 * 1000.0 - 1.96;
+            float s11 = (tex.x  * 65535.0 + tex.y  * 255.0 + tex.z)  / 16777215.0 * 1000.0 ;
+            float s01 = (tex0.x * 65535.0 + tex0.y * 255.0 + tex0.z) / 16777215.0 * 1000.0;
+            float s21 = (tex1.x * 65535.0 + tex1.y * 255.0 + tex1.z) / 16777215.0 * 1000.0 ;
+            float s10 = (tex2.x * 65535.0 + tex2.y * 255.0 + tex2.z) / 16777215.0 * 1000.0 ;
+            float s12 = (tex3.x * 65535.0 + tex3.y * 255.0 + tex3.z) / 16777215.0 * 1000.0 ;
 
             vec3 va = normalize( vec3(off.zy, s21 - s11) );
             vec3 vb = normalize( vec3(off.yz, s12 - s11) );
@@ -111,7 +111,7 @@
         {
             vec4 ambiantColor =  vec4(0.35,0.35,0.35,1.0);
             vec4 diffuseColor =  vec4(0.6,0.6,0.6,1.0);
-            vec4 specularColor = vec4(0.25,0.25,0.25,1.0);
+            vec4 specularColor = vec4(0.15,0.15,0.15,1.0);
 
             vec3 lightPosition = vec3(1000000.0, 1000000.0, 1000000.0);
 
